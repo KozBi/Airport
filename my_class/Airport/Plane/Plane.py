@@ -1,7 +1,9 @@
-from PlaneCoordinate import PlaneCoordinate
+from my_class.Airport.Plane.Coordinate import PlaneCoordinate
 
 class Plane():
     def __init__(self,id,coordinate:tuple):
         self.id=id
         self.planecoordinate=PlaneCoordinate(coordinate)
         self.landing=False
+        self.connection=None
+

@@ -1,18 +1,21 @@
 import socket
 from concurrent.futures import ThreadPoolExecutor
+from my_class.Airport.Plane.Plane import Plane
 import threading
 import json
 
-from my_class.Plane import Plane
+from my_class.Airport.Plane.Plane import Plane
 
 from my_class.DataBase.DataBaseConnection import DataBaseConnection
 
 class PlaneConnetion:
-    def __init__(self,conn:socket, addr,server_ref):
+    def __init__(self,conn:socket, addr,server_ref,plane: Plane):
         self.conn=conn
         self.addr=addr
-        self.server_ref=server_ref
-        self.connection_id=None
+        self.server_ref=server_ref     
+        self.plane = plane
+        self.connection_id = self.plane.id
+        self.plane.connection=self #  Plane.connection jest ustawiane w konstruktorze PlaneConnection, więc nie musisz robić tego wcześniej w Server.
 
         self.connection = threading.Thread(target=self.handle_connetion,daemon=True)
         self.connection.start()
@@ -44,10 +47,10 @@ class ServerConnetions:
         """Return number of aktiv connections"""
         return len(self.connetions)
 
-    def get_new_connection(self,conn:socket,addr):
+    def get_new_connection(self,conn:socket,addr,plane: Plane):
         if self.active_planesconnection() < self.Max_planes:
             with self.lock:
-                new_con=PlaneConnetion(conn,addr,self)
+                new_con=PlaneConnetion(conn,addr,self,plane)
                 self.connetions.append(new_con)
                 return new_con
                 

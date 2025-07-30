@@ -17,4 +17,5 @@ Checks if the aircraft is exactly at the landing runway coordinates.
         return plane.planecoordinate.coordinate == airportlandrunway.coordinate
 
     def auto_landing(self,airportlandrunway:AirportLandRunway,plane:Plane):
-        while self._plane_is_in_corridor(airportlandrunway,plane)
+        while not self._plane_is_in_corridor(airportlandrunway,plane):
+            pass
