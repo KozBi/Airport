@@ -3,11 +3,16 @@ from concurrent.futures import ThreadPoolExecutor
 import threading
 import json
 
+from my_class.Plane import Plane
+
+from my_class.DataBase.DataBaseConnection import DataBaseConnection
+
 class PlaneConnetion:
     def __init__(self,conn:socket, addr,server_ref):
         self.conn=conn
         self.addr=addr
         self.server_ref=server_ref
+        self.connection_id=None
 
         self.connection = threading.Thread(target=self.handle_connetion,daemon=True)
         self.connection.start()
@@ -32,16 +37,20 @@ class ServerConnetions:
     def __init__(self,Max_planes=100):
         self.connetions=[] #list of connetions
         self.Max_planes=Max_planes
+
         self.lock = threading.Lock()
         
     def active_planesconnection(self):
         """Return number of aktiv connections"""
         return len(self.connetions)
 
-    def get_new_connetion(self,conn,addr):
+    def get_new_connection(self,conn:socket,addr):
         if self.active_planesconnection() < self.Max_planes:
             with self.lock:
-                self.connetions.append(PlaneConnetion(conn,addr,self))
+                new_con=PlaneConnetion(conn,addr,self)
+                self.connetions.append(new_con)
+                return new_con
+                
         else: pass # No place for the plane
 
     def remove_connection(self, planeconnection:PlaneConnetion):
