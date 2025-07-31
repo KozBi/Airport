@@ -4,8 +4,7 @@ from datetime import datetime
 import logging
 
 from my_class.ServerConnection import ServerConnetions
-from my_class.DataBase.DataBaseConnection import DataBaseConnection
-from my_class.DataBase.DataBaseLog import DataBaseLog
+
 from my_class.Airport.Airport import Airport
 from my_class.Airport.Plane.Plane import Plane
 
@@ -16,41 +15,27 @@ CREATION_DATE = datetime.now()
 MAX_PLANES=100
 logging.basicConfig(level=logging.DEBUG)
 
-DEAFULT_COORDINATE=(1000,1000,5000)
 class Server:
     def __init__(self):
 
-        self.servcon=ServerConnetions(MAX_PLANES)
-        self.databaseconnection=DataBaseConnection()
-        self.databaselog=DataBaseLog(self.databaseconnection)
-        self.airport=Airport()
-
+        self.servcon=ServerConnetions(MAX_PLANES) # handle connections to planes
+        self.airport=Airport() #whole logic
         self.response=None
-        # self.number_of_planes=0
 
     def start_server(self):
 
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.bind((HOST, PORT))
-                s.listen()
-                logging.info(f"Airport Server started at {HOST}:{PORT}")
-                temp=0
-                while True:
-                    n_conn, n_addr = s.accept()
-                    self.get_new_plane_connetion(n_conn,n_addr)
-
-                    # self.number_of_planes=self.servcon.active_planesconnection()
-                    # if self.number_of_planes != temp:
-                    #      print(f"Number of planes{self.number_of_planes}")
-                    #      self.number_of_planes = temp
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.bind((HOST, PORT))
+            s.listen()
+            logging.info(f"Airport Server started at {HOST}:{PORT}")
+            while True:
+                n_conn, n_addr = s.accept()
+                self.get_new_plane_connetion(n_conn,n_addr)
 
 
     def get_new_plane_connetion(self,n_conn,n_addr):
-        plane_id=self.databaselog.connection_established() #create log in database, receive plane id 
-        
-        if plane_id is not None:
-            plane=Plane(plane_id,DEAFULT_COORDINATE) #create Plane
-            self.airport.new_plane(plane) #add plane to the airport class
+        plane=self.airport.get_new_plane()     
+        if plane:
             self.servcon.get_new_connection(n_conn,n_addr,plane) #create a connetion to the plane
         else:
             logging.debug("Plane cannot be added to Database")
