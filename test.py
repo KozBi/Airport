@@ -1,4 +1,10 @@
+import time
 
-HOST = "127.0.0.1"  # The server hostname or IP address
-PORT = 65432  # The port used by the server
 
+def odlicz_do_5():
+    for i in range(1, 6):
+        yield i
+
+for liczba in odlicz_do_5():
+    print(liczba)
+    time.sleep(1)

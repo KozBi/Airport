@@ -1,28 +1,33 @@
 import socket
 import json
 from my_class.Airport.Plane.Coordinate import PlaneCoordinate
+from my_class.Airport.Plane.PlaneCommand import PlaneCommand
 import time
 HOST = "127.0.0.1"  # The server hostname or IP address
 PORT = 65432  # The port used by the server
 
 class PlaneClient():
     def __init__(self):
-        self.coordinate=PlaneCoordinate((10000,1000,5432))
+        self.coordinate=PlaneCoordinate((0,0,243))
+        self.planecommand=PlaneCommand(self.coordinate)
         
     def start_clinet(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((HOST, PORT))
             print("Connected to the airport.")
-            t_cordinate=(0,0,0)
+            d_cordinate=(0,0,0)
             while True:
 
-                self.coordinate.move(-10,0,0)
-                time.sleep(1)
-                if self.difference(t_cordinate):
-                    cord=self.coordinate.send_json()
-                    s.sendall(str(cord).encode('utf-8'))
-                    t_cordinate=self.coordinate.coordinates()
-                    print(self.coordinate)
+                generator=self.planecommand.move_toward(0,0,0) #instead of new threat, python do everthing and make genetator to work with loop and sleep.
+                
+                for t_cordinate in generator:
+                    time.sleep(1)
+                    print(t_cordinate)
+                    if self.difference(d_cordinate):
+                        cord=self.coordinate.send_json()
+                        s.sendall(str(cord).encode('utf-8'))
+                        d_cordinate=self.coordinate.coordinates()
+                        print(self.coordinate)
 
        #         data = s.recv(2024)
         #        response = json.loads(data.decode('utf-8'))
