@@ -1,4 +1,9 @@
-from my_class.Airport.Plane.Coordinate import Coordinate
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from my_class.Plane.Coordinate import Coordinate
 
 class AirportLandRunway():
     def __init__(self, width, lenght):

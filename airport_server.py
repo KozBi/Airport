@@ -6,7 +6,7 @@ import logging
 from my_class.ServerConnection import ServerConnetions
 
 from my_class.Airport.Airport import Airport
-from my_class.Airport.Plane.Plane import Plane
+from my_class.Plane.Plane import Plane
 
 HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 PORT = 65432  # Port to listen on (non-privileged ports are > 1023)

@@ -1,11 +1,11 @@
 import socket
 from concurrent.futures import ThreadPoolExecutor
-from my_class.Airport.Plane.Plane import Plane
+from my_class.Plane.Plane import Plane
 import threading
 import json
 import logging
 
-from my_class.Airport.Plane.Plane import Plane
+from my_class.Plane.Plane import Plane
 
 
 class PlaneConnetion:

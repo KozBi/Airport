@@ -23,13 +23,13 @@ class PlaneCoordinate(Coordinate):
         super().__init__(coordinate)
         pass
 
-    def update(self,w=0,l=0,h=0):
-        self.width += w
-        self.length += l
-        self.height += h
+    def update(self,coordintate:tuple):
+        self.width += coordintate[0]
+        self.length += coordintate[1]
+        self.height += coordintate[2]
 
 
-    def set(self,w=0,l=0,h=0):
-        self.width = w
-        self.length = l
-        self.height = h
+    def set(self,coordintate:tuple):
+        self.width = coordintate[0]
+        self.length = coordintate[1]
+        self.height = coordintate[2]

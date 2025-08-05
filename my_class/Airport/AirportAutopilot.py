@@ -1,5 +1,10 @@
-from my_class.Airport.Plane.Plane import Plane
+import sys
+import os
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+
+from my_class.Plane.Plane import Plane
 from my_class.Airport.AirportLandRunway import AirportLandRunway
 from my_class.Airport.AirportArea import AirportArea
 
