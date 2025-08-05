@@ -29,6 +29,28 @@ class TestPlaneCommandRouter(unittest.TestCase):
                 self.assertEqual(self.plane.coordinate.coordinates(), (0,0,0))
                 break
 
+    def test_change_cord_target(self):
+        i=0
+        while True:            
+            if i < 5:
+                command={"target_coordinate": (0,100,0)}
+            else:
+                command={"target_coordinate": (100,0,0)}
+
+            self.commandrouter.command(command)
+            print (self.plane.coordinate.coordinates())
+
+            if self.plane.coordinate.coordinates() ==(100,000,0):
+                self.assertEqual(self.plane.coordinate.coordinates(), (100,0,0))
+                break
+            i+=1
+
+            if i>200:
+                #something goes wrong
+                self.assertIn(False)
+                break
+            
+
 if __name__ == '__main__':
     unittest.main()
 

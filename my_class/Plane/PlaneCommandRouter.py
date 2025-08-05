@@ -18,30 +18,32 @@ class PlaneCommandRouter():
         if command.get("target_coordinate"):
             self.coordinate_target=command.get("target_coordinate")
             self.planecommand.move_toward(Coordinate(self.coordinate_target))
-
-        
+   
 
 class PlaneCommand():
     def __init__(self,crd:PlaneCoordinate):
         self.planecrd=crd #Plane Coordinate
         self.dummy_planecrd=deepcopy(crd) #Plane Coordinate
+        self.generator=None
+        self.finial_crd=None
         print(self.dummy_planecrd)
 
 
     def move_toward(self, crd:Coordinate , speed:int=10):
-        generator=None
-        if generator is None:
-            generator=self.move_toward_generator(crd,speed) #instead of new threat, python do everthing and make genetator to work with loop and sleep.
+        # this function do generator if is called once again generator is changed
+        if self.generator is None or self.finial_crd != crd:
+            self.finial_crd = crd
+            self.generator=self.move_toward_generator(crd,speed) #instead of new threat, python do everthing and make genetator to work with loop and sleep.
         try:
-            new_coord=next(generator)
+            new_coord=next(self.generator)
             self.planecrd.set(new_coord)
         except StopIteration:
-            generator=None
+            self.generator=None
 
 
     def move_toward_generator(self, crd:Coordinate , speed:int):
         """crd - target coordingate
-            Return generator of coordinates"""
+            Return generator of coordinates - it is a path to the destination"""
         dx=self.dummy_planecrd.width - crd.width
         dy=self.dummy_planecrd.length - crd.length
         dz=self.dummy_planecrd.height - crd.height

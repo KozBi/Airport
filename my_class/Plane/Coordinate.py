@@ -2,6 +2,7 @@ import logging
 
 class Coordinate():
     def __init__(self,coordinate:tuple=(0,0,0)):
+        """crnds: actual coordinates"""
         self.width=coordinate[0]
         self.length=coordinate[1]
         self.height=coordinate[2]
