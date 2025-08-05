@@ -22,6 +22,7 @@ class PlaneCommandRouter():
 
 class PlaneCommand():
     def __init__(self,crd:PlaneCoordinate):
+
         self.planecrd=crd #Plane Coordinate
         self.dummy_planecrd=deepcopy(crd) #Plane Coordinate
         self.generator=None

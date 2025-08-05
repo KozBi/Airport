@@ -20,7 +20,13 @@ class Coordinate():
 
 
 class PlaneCoordinate(Coordinate):
+
     def __init__(self,coordinate:tuple):
+        """     (x,y,z)
+            x - widht
+            y - lenght
+            z - hieght
+        """
         super().__init__(coordinate)
         pass
 

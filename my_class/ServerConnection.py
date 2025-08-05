@@ -1,5 +1,5 @@
 import socket
-from concurrent.futures import ThreadPoolExecutor
+#from concurrent.futures import ThreadPoolExecutor
 from my_class.Plane.Plane import Plane
 import threading
 import json
@@ -10,7 +10,7 @@ from my_class.Plane.Plane import Plane
 
 class PlaneConnetion:
     def __init__(self,conn:socket, addr,server_ref,plane: Plane):
-        self.conn=conn
+        self.conn:socket=conn
         self.addr=addr
         self.server_ref=server_ref     
         self.plane = plane
@@ -25,14 +25,16 @@ class PlaneConnetion:
         with self.conn:
             print(f"New connection established, Connected by {self.addr} and {self.conn}")
             while True:
+
                 data = self.conn.recv(2024)
-
-                if not data:
-                    break
-
                 message = data.decode('utf-8') # receive from client a task
                 self.planecomunitaionjson.handle_message(message)
                 print(f"{self.plane.id}{self.plane.coordinate}")
+
+                cord={"target_coordinate": (100,100,1000)}
+                self.conn.sendall(str(cord).encode('utf-8'))
+
+
                               
                 if message == "stop":
                     print("Shutting down connection by user")

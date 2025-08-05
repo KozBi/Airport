@@ -35,6 +35,7 @@ class TestPlaneCommandRouter(unittest.TestCase):
             if i < 5:
                 command={"target_coordinate": (0,100,0)}
             else:
+                #change destination after few steps
                 command={"target_coordinate": (100,0,0)}
 
             self.commandrouter.command(command)
