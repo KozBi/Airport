@@ -4,7 +4,7 @@ from my_class.Plane.Plane import Plane
 import threading
 import json
 import logging
-
+import random
 from my_class.Plane.Plane import Plane
 
 
@@ -16,7 +16,7 @@ class PlaneConnetion:
         self.plane = plane
         self.connection_id = self.plane.id
         self.plane.connection=self #  Plane.connection jest ustawiane w konstruktorze PlaneConnection, więc nie musisz robić tego wcześniej w Server
-        self.planecomunitaionjson=PlaneComuniationJson(self.plane)
+        self.planecomunicationjson=PlaneComuncationJson(self.plane)
 
         self.connection = threading.Thread(target=self.handle_connetion,daemon=True)
         self.connection.start()
@@ -24,18 +24,34 @@ class PlaneConnetion:
     def handle_connetion(self):
         with self.conn:
             print(f"New connection established, Connected by {self.addr} and {self.conn}")
+
+            # 1 Receive initial position 
+            data = self.conn.recv(2024)
+            message =  json.loads(data.decode('utf-8')) # receive from client a task
+            self.planecomunicationjson.handle_message(message)
+            print(f"New Plane {self.plane.id}{self.plane.coordinate}")
+
+            # 1 Send target
+            cord={"target_coordinate": [100,100,1000]}
+            cord=json.dumps(cord)
+            self.conn.sendall(cord.encode('utf-8'))
+            x = random.randint(100, 1000)
+
             while True:
 
+                # 1 Receive position 
                 data = self.conn.recv(2024)
-                message = data.decode('utf-8') # receive from client a task
-                self.planecomunitaionjson.handle_message(message)
-                print(f"{self.plane.id}{self.plane.coordinate}")
+                try:
+                    message = json.loads(data.decode('utf-8')) # receive from client a task
+                    self.planecomunicationjson.handle_message(message)
+                    print(f"{self.plane.id}{self.plane.coordinate} Target x:{x}")
 
-                cord={"target_coordinate": (100,100,1000)}
-                self.conn.sendall(str(cord).encode('utf-8'))
-
-
-                              
+                    # 1 Send target
+                    
+                    cord={"target_coordinate": [x,100,1000]}
+                    cord=json.dumps(cord)
+                    self.conn.sendall(cord.encode('utf-8'))
+                except: logging.DEBUG("No message from Plane client")
                 if message == "stop":
                     print("Shutting down connection by user")
                     break           
@@ -61,7 +77,7 @@ class ServerConnetions:
                 self.connetions.append(new_con)
                 return new_con
                 
-        else: pass # No place for the plane
+        else: pass # No place for the plane to do
 
     def remove_connection(self, planeconnection:PlaneConnetion):
         with self.lock:
@@ -69,23 +85,17 @@ class ServerConnetions:
                 print(f"Connection to plane {planeconnection.addr} has been deleted from Pool")
                 self.connetions.remove(planeconnection)
 
-
-
-
-class PlaneComuniationJson():
+class PlaneComuncationJson():
     def __init__(self,plane: Plane):
         self.plane=plane
 
-    def handle_message(self,msg:str):
-        msg = msg.replace("'", '"')
-        try:
-            d =json.loads(msg)
-            if all(k in d for k in ('x','y','z')):
-                t = (d['x'], d['y'], d['z'])
-                self.plane.coordinate.set(t)
+    def handle_message(self,msg:dict):
 
-        except json.JSONDecodeError:
-            logging.error("Invalid JSON format")
-    
+        if isinstance(msg, dict):
+            if msg["type"]=="position_update":
+                new_position=msg["position"]
+                self.plane.coordinate.set(new_position)
+        else: logging.CRITICAL("Command is not a dict. Programing Error")
+       
 
             

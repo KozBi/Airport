@@ -1,4 +1,5 @@
 import logging
+import json
 
 class Coordinate():
     def __init__(self,coordinate:tuple=(0,0,0)):
@@ -15,13 +16,15 @@ class Coordinate():
         return (self.width,self.length,self.height)
 
     def send_json(self):
-        return {"x":self.width, "y":self.length, "z":self.height}
-
-
+        sendjson={
+                "type": "position_update",
+                "position": [self.width, self.length, self.height]
+                }
+        return (json.dumps(sendjson).encode('utf-8'))
 
 class PlaneCoordinate(Coordinate):
 
-    def __init__(self,coordinate:tuple):
+    def __init__(self,coordinate:tuple=(0,0,0)):
         """     (x,y,z)
             x - widht
             y - lenght

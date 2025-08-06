@@ -12,12 +12,15 @@ class PlaneCommandRouter():
     def __init__(self,plane:Plane):
         self.plane=plane
         self.planecommand=PlaneCommand(self.plane.coordinate)
+        self._target_coordinate=PlaneCoordinate() #dummy target coordinate to not create all the time a new object
 
 
     def command(self,command:dict):
         if command.get("target_coordinate"):
-            self.coordinate_target=command.get("target_coordinate")
-            self.planecommand.move_toward(Coordinate(self.coordinate_target))
+            self.coordinate_target=command["target_coordinate"]
+            # 1. set a new coordianate 2. call move_toward
+            self._target_coordinate.set(self.coordinate_target)
+            self.planecommand.move_toward(self._target_coordinate)
    
 
 class PlaneCommand():
@@ -27,7 +30,6 @@ class PlaneCommand():
         self.dummy_planecrd=deepcopy(crd) #Plane Coordinate
         self.generator=None
         self.finial_crd=None
-        print(self.dummy_planecrd)
 
 
     def move_toward(self, crd:Coordinate , speed:int=10):
@@ -63,7 +65,6 @@ class PlaneCommand():
             uz = dz / distance  # unit vector z
 
             self.dummy_planecrd.update((-ux * speed,-uy * speed,-uz * speed))
-            print(self.dummy_planecrd)
             if distance >= speed:
                 #generate value for generator
                 yield self.dummy_planecrd.coordinates() 

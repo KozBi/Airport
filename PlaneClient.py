@@ -18,30 +18,36 @@ class PlaneClient():
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((HOST, PORT))
             print("Connected to the airport.")
-            d_cordinate=(0,0,0)
-            while True:
 
-                    if self.difference(d_cordinate):
-                        cord=self.plane.coordinate.send_json()
-                        s.sendall(str(cord).encode('utf-8'))
-                        d_cordinate=self.plane.coordinate.coordinates()
-                        print(self.plane.coordinate)
+            # 1. Send initial position
+            position = self.plane.coordinate.send_json()
+            s.sendall(position)
 
-                    if s.recv(2024):
-                        data= s.recv(2024)
-                        self.planecommmand.command(data) #handle movement
-                        time.sleep(1)
+            # 2. Receive target
+            data = s.recv(2048)
+            command=json.loads(data.decode('utf-8')) 
 
+            while True:               
+                    
+                    # 3. Simulate move
+                    self.planecommmand.command(command) # movement
+                    time.sleep(1)
 
+                    # 4. Send current position
+                    cord=self.plane.coordinate.send_json()
+                    s.sendall(cord)
+                    print(self.plane.coordinate)
 
-    def difference(self,last_cooridane:tuple,dif=9):
-        """ when difference is more than 'd' then retrun True"""
-        actuall=self.coordinate.coordinates()
-        dif_tuple = (abs(actuall[0] - last_cooridane[0]), abs(actuall[1] - last_cooridane[1]), abs(actuall[2] - last_cooridane[2]))
-
-        if any(d > dif for d in dif_tuple):
-            return True
-
+                    # 5. Check for command
+                    s.settimeout(0.5)
+                    try:
+                        new_data = s.recv(2048)
+                        if new_data:
+                            command  = json.loads(new_data.decode('utf-8')) 
+                            self.planecommmand.command(command)
+                    except socket.timeout:
+                        print("Czekam")
+                        continue
                 
 
 if __name__=="__main__":
