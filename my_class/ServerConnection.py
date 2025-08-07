@@ -1,11 +1,11 @@
 import socket
 #from concurrent.futures import ThreadPoolExecutor
-from my_class.Plane.Plane import Plane
+from my_class.Planemodules.Planemodule import Plane
 import threading
 import json
 import logging
 import random
-from my_class.Plane.Plane import Plane
+from my_class.Planemodules.Planemodule import Plane
 
 
 class PlaneConnetion:
@@ -15,7 +15,7 @@ class PlaneConnetion:
         self.server_ref=server_ref     
         self.plane = plane
         self.connection_id = self.plane.id
-        self.plane.connection=self #  Plane.connection jest ustawiane w konstruktorze PlaneConnection, więc nie musisz robić tego wcześniej w Server
+        self.plane.connection=self #  Plane.connection jest ustawiane w konstruktorze PlaneConnection, więc nie robię tego wcześniej w Server
         self.planecomunicationjson=PlaneComuncationJson(self.plane)
 
         self.connection = threading.Thread(target=self.handle_connetion,daemon=True)
@@ -46,7 +46,7 @@ class PlaneConnetion:
                     self.planecomunicationjson.handle_message(message)
                     print(f"{self.plane.id}{self.plane.coordinate} Target x:{x}")
 
-                    # 1 Send target
+                    # 2 Send target
                     
                     cord={"target_coordinate": [x,100,1000]}
                     cord=json.dumps(cord)

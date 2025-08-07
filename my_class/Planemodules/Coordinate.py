@@ -21,6 +21,9 @@ class Coordinate():
                 "position": [self.width, self.length, self.height]
                 }
         return (json.dumps(sendjson).encode('utf-8'))
+    
+    def get_list_coordinates(self):
+        return [self.width,self.length,self.height]
 
 class PlaneCoordinate(Coordinate):
 
@@ -34,12 +37,14 @@ class PlaneCoordinate(Coordinate):
         pass
 
     def update(self,coordintate:tuple):
+        """move object with (x,y,z)"""
         self.width += coordintate[0]
         self.length += coordintate[1]
         self.height += coordintate[2]
 
 
     def set(self,coordintate:tuple):
+        """set new position (x,y,z)"""
         self.width = coordintate[0]
         self.length = coordintate[1]
         self.height = coordintate[2]

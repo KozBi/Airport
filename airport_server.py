@@ -6,7 +6,7 @@ import logging
 from my_class.ServerConnection import ServerConnetions
 
 from my_class.Airport.Airport import Airport
-from my_class.Plane.Plane import Plane
+from my_class.Planemodules.Planemodule import Plane
 
 HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
@@ -28,6 +28,8 @@ class Server:
             s.bind((HOST, PORT))
             s.listen()
             logging.info(f"Airport Server started at {HOST}:{PORT}")
+            self.airport.GUI() #start GUI
+
             while True:
                 n_conn, n_addr = s.accept()
                 self.get_new_plane_connetion(n_conn,n_addr)

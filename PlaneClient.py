@@ -1,14 +1,19 @@
 import socket
 import json
-from my_class.Plane.Coordinate import PlaneCoordinate
-from my_class.Plane.Plane import Plane
-from my_class.Plane.PlaneCommandRouter import PlaneCommandRouter
+from my_class.Planemodules.Coordinate import PlaneCoordinate
+from my_class.Planemodules.Planemodule import Plane
+from my_class.Planemodules.PlaneCommandRouter import PlaneCommandRouter
 import time
+import logging
+import random
 HOST = "127.0.0.1"  # The server hostname or IP address
 PORT = 65432  # The port used by the server
 
+
+start_coordinate=None
+
 class PlaneClient():
-    def __init__(self,start_coordinate:tuple=(0,200,200)):
+    def __init__(self,start_coordinate:tuple=(10000,2000,200)):
         self.plane=Plane(0,start_coordinate)
         self.coordinate=PlaneCoordinate(start_coordinate)
         self.planecommmand=PlaneCommandRouter(self.plane)
@@ -46,7 +51,7 @@ class PlaneClient():
                             command  = json.loads(new_data.decode('utf-8')) 
                             self.planecommmand.command(command)
                     except socket.timeout:
-                        print("Czekam")
+                        logging.info("No data from Server")
                         continue
                 
 

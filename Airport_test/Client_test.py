@@ -5,8 +5,8 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from my_class.Plane.Plane import Plane
-from my_class.Plane.PlaneCommandRouter import PlaneCommandRouter
+from my_class.Planemodules.Planemodule import Plane
+from my_class.Planemodules.PlaneCommandRouter import PlaneCommandRouter
 
 
 

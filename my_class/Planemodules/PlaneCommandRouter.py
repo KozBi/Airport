@@ -5,8 +5,8 @@ from copy import deepcopy
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from my_class.Plane.Coordinate import PlaneCoordinate, Coordinate
-from my_class.Plane.Plane import Plane
+from my_class.Planemodules.Coordinate import PlaneCoordinate, Coordinate
+from my_class.Planemodules.Planemodule import Plane
 
 class PlaneCommandRouter():
     def __init__(self,plane:Plane):
