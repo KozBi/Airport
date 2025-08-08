@@ -44,7 +44,7 @@ class PlaneConnetion:
                 try:
                     message = json.loads(data.decode('utf-8')) # receive from client a task
                     self.planecomunicationjson.handle_message(message)
-                    print(f"{self.plane.id}{self.plane.coordinate} Target x:{x}")
+       #             logging.info(f"{self.plane.id}{self.plane.coordinate} Target x:{x}")
 
                     # 2 Send target
                     

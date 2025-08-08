@@ -2,13 +2,13 @@
 import unittest
 import sys
 import os
-import time
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from GUI.GUI import AirPortGUI
 from my_class.Planemodules.Planemodule import Plane
 from my_class.Airport.Airportmodule import AirPortPlanes
+
 
 class TestGUI(unittest.TestCase):
 
@@ -29,11 +29,5 @@ class TestGUI(unittest.TestCase):
         print(result1)
 
     def test_gui(self):
-        
-        for i in range(100):
-            time.sleep(1)
-            self.gui.show()
-            self.planes.planes[1].move((100,0,0))
-            print(self.planes.planes[1].coordinate.coordinates())
-            print("movment")
+        self.gui.show()
     

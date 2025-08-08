@@ -20,7 +20,7 @@ class Plane():
 
     def move(self,x:tuple=(0,0,0)):
         if len(x) != 3:
-            logging.DEBUG("Wrong parametert")
+            logging.DEBUG("Wrong parameteters")
         else: 
             self.coordinate.update(x)
 

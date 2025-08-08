@@ -15,12 +15,12 @@ DEAFULT_COORDINATE=(1000,1000,5000)
 
 class Airport():
     def __init__(self):
-        self.planes={}
         self.airportarea=AirportArea()
-        self.airportgui=AirPortGUI()
+        self.airportplanes=AirPortPlanes()
+        self.airportgui=AirPortGUI(self.airportplanes)
       #  self.airportautopilot=AirportAutopilot()
      #   self.airportlandrunway=AirportLandRunway()
-        self.airportplanes=AirPortPlanes()
+        
         self.airportlogbook=AirportLogbook() #create a log 
 
 

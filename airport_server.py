@@ -1,19 +1,20 @@
 import socket
-import json
+import threading
 from datetime import datetime
 import logging
 
 from my_class.ServerConnection import ServerConnetions
-
 from my_class.Airport.Airport import Airport
-from my_class.Planemodules.Planemodule import Plane
 
 HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
 VERSION = "0.0.1"
 CREATION_DATE = datetime.now()
 MAX_PLANES=100
+
 logging.basicConfig(level=logging.DEBUG)
+# Clear logs only from matplotlib
+logging.getLogger('matplotlib').setLevel(logging.WARNING)
 
 class Server:
     def __init__(self):
@@ -28,7 +29,6 @@ class Server:
             s.bind((HOST, PORT))
             s.listen()
             logging.info(f"Airport Server started at {HOST}:{PORT}")
-            self.airport.GUI() #start GUI
 
             while True:
                 n_conn, n_addr = s.accept()
@@ -36,13 +36,19 @@ class Server:
 
 
     def get_new_plane_connetion(self,n_conn,n_addr):
-        plane=self.airport.get_new_plane()     
+        plane=self.airport.get_new_plane()   
         if plane:
             self.servcon.get_new_connection(n_conn,n_addr,plane) #create a connetion to the plane
         else:
             logging.debug("Plane cannot be added to Database")
 
+    def start_gui(self):
+        self.airport.start_gui() #start GUI
+
 
 if __name__ == "__main__":
     server=Server()
-    server.start_server()
+    threading.Thread(target=server.start_server, daemon=True).start()
+    server.start_gui()  # GUI w głównym wątku
+
+    
