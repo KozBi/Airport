@@ -13,9 +13,10 @@ PORT = 65432  # The port used by the server
 start_coordinate=None
 
 class PlaneClient():
-    def __init__(self,start_coordinate:tuple=(10000,2000,200)):
+
+    
+    def __init__(self,start_coordinate:tuple=(0,0,0)):
         self.plane=Plane(0,start_coordinate)
-        self.coordinate=PlaneCoordinate(start_coordinate)
         self.planecommmand=PlaneCommandRouter(self.plane)
 
         
@@ -55,6 +56,21 @@ class PlaneClient():
                         continue
                 
 
+def generate_border_coordinate(max_coord=10000, altitude_range=(2500, 5000)):
+    # Generate x or y
+    if random.choice([True, False]):  
+        # if True then y is 0 or 10 000, x=random
+        x = random.randint(0, max_coord)
+        y = random.choice([0, max_coord])
+    else: # if False then x is 0 or 10 000, y=random
+        x = random.choice([0, max_coord])
+        y = random.randint(0, max_coord)
+
+    z = random.randint(*altitude_range)
+    return (x, y, z)
+
+
 if __name__=="__main__":
-    client=PlaneClient()
+
+    client=PlaneClient(generate_border_coordinate())
     client.start_clinet()

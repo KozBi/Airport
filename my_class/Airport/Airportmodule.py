@@ -1,6 +1,9 @@
 import sys
 import os
+import logging
+
 from my_class import Planemodules
+from my_class.Planemodules.Planemodule import Plane
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -31,8 +34,10 @@ class AirPortPlanes():
     def add_plane(self, plane:Planemodules):
         self.planes[plane.id]=plane
 
-    def remove_plane(self, plane_id):
-        self.planes.pop(plane_id,None)
+    def remove_plane(self, plane:Plane):
+        key=plane.id
+        self.planes.pop(key,True)
+        logging.info(f"Plane {plane.id} has been removed")
 
     
         

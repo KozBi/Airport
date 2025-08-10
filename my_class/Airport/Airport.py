@@ -38,6 +38,10 @@ class Airport():
         else:
             logging.debug("Plane cannot be added to Database")
 
+    def remove_plane(self,plane:Plane):
+        """Removing a plane from the Airportplanes class"""
+        self.airportplanes.remove_plane(plane)
+
 
     def start_gui(self):
         """Start a GUI"""

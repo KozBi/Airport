@@ -6,6 +6,7 @@ import json
 import logging
 import random
 from my_class.Planemodules.Planemodule import Plane
+from my_class.Airport.Airport import Airport
 
 
 class PlaneConnetion:
@@ -55,14 +56,15 @@ class PlaneConnetion:
                 if message == "stop":
                     print("Shutting down connection by user")
                     break           
-            self.server_ref.remove_connection(self)
+            self.server_ref.remove_connection(self,self.plane)
 
 
 class ServerConnetions:
-    def __init__(self,Max_planes=100):
+    def __init__(self,airport_ref:Airport,Max_planes=100,):
         """Handle connections to planes"""
         self.connetions=[] #list of connetions
         self.Max_planes=Max_planes
+        self,airport_ref=airport_ref
 
         self.lock = threading.Lock()
         
@@ -79,11 +81,13 @@ class ServerConnetions:
                 
         else: pass # No place for the plane to do
 
-    def remove_connection(self, planeconnection:PlaneConnetion):
+    def remove_connection(self, planeconnection:PlaneConnetion,plane:Plane):
         with self.lock:
             if planeconnection in self.connetions:
                 print(f"Connection to plane {planeconnection.addr} has been deleted from Pool")
                 self.connetions.remove(planeconnection)
+                #self.plane.destroy??
+
 
 class PlaneComuncationJson():
     def __init__(self,plane: Plane):

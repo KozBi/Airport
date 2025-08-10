@@ -49,6 +49,6 @@ class Server:
 if __name__ == "__main__":
     server=Server()
     threading.Thread(target=server.start_server, daemon=True).start()
-    server.start_gui()  # GUI w głównym wątku
+    server.start_gui()  # GUI must be called in main thread
 
     
