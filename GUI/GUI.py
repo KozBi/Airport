@@ -49,11 +49,10 @@ class AirPortGUI:
             self.labels.append(key)
             # 3 add coordinate to np
             new_coordinate=plane.coordinate.get_list_coordinates()
-            print(new_coordinate)
             self.points.append(new_coordinate)
 
         if len(self.points)==0: ###
-            logging.info("Nothing is happening")
+            #logging.info("Nothing is happening")
             return  # Return None if no client-Plane is connected
         
         #Create a np array with new created points

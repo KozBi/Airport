@@ -1,20 +1,14 @@
+lista = [1, 2,2, 3, 4]
 
-def generator(i=0):
-    while True:
-        i+=1
-        if i<5:
-            yield i
-        else:
-            yield i+1
-            return
-test=generator()
+# BŁĘDNE podejście
+for x in lista:
+    if x % 2 == 0:
+        lista.remove(x)
+print(lista)  # [1, 3] — ale 3 zostało, bo iteracja się przesunęła
 
-while True:
-    try:
-        new_coord=next(test)
-        print (new_coord)
-    except StopIteration:
-        break
-
-
-
+# POPRAWNE podejście
+lista = [1, 2, 3, 4]
+for x in lista[:]:  # kopia listy
+    if x % 2 == 0:
+        lista.remove(x)
+print(lista)  # [1, 3] — teraz działa jak trzeba

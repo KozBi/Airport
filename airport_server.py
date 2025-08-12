@@ -2,6 +2,7 @@ import socket
 import threading
 from datetime import datetime
 import logging
+import time
 
 from my_class.ServerConnection import ServerConnetions
 from my_class.Airport.Airport import Airport
@@ -19,9 +20,12 @@ logging.getLogger('matplotlib').setLevel(logging.WARNING)
 class Server:
     def __init__(self):
 
-        self.servcon=ServerConnetions(MAX_PLANES) # handle connections to planes
+
         self.airport=Airport() #whole logic
+        self.servcon=ServerConnetions(self.airport,MAX_PLANES) # handle connections to planes
         self.response=None
+        self.connection_checker = threading.Thread(target=self.check_connetions,daemon=True)
+        self.connection_checker.start()
 
     def start_server(self):
 
@@ -33,6 +37,7 @@ class Server:
             while True:
                 n_conn, n_addr = s.accept()
                 self.get_new_plane_connetion(n_conn,n_addr)
+                
 
 
     def get_new_plane_connetion(self,n_conn,n_addr):
@@ -41,6 +46,11 @@ class Server:
             self.servcon.get_new_connection(n_conn,n_addr,plane) #create a connetion to the plane
         else:
             logging.debug("Plane cannot be added to Database")
+
+    def check_connetions(self):
+        while True:
+            time.sleep(5)  # check every 5 second
+            self.servcon.remove_connection()
 
     def start_gui(self):
         self.airport.start_gui() #start GUI
