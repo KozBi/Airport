@@ -5,12 +5,13 @@ import threading
 import json
 import logging
 import random
-from my_class.Planemodules.Planemodule import Plane
+from my_class.Planemodules.Planemodule import PlaneAirport
 from my_class.Airport.Airport import Airport
+from my_class.Planemodules.Planemodule import PlaneCoordinate
 
 
 class PlaneConnetion:
-    def __init__(self,conn:socket, addr,server_ref,plane: Plane):
+    def __init__(self,conn:socket, addr,server_ref,plane: PlaneAirport):
         self.conn:socket=conn
         self.addr=addr
         self.server_ref=server_ref     
@@ -33,10 +34,11 @@ class PlaneConnetion:
             print(f"New Plane {self.plane.id}{self.plane.coordinate}")
 
             # 1 Send target
-            cord={"target_coordinate": [100,100,1000]}
+         ##   target=self.plane.target_coordinate.coordinates()
+           # cord={"target_coordinate": (target)}
+            cord=self.plane.get_target()
             cord=json.dumps(cord)
             self.conn.sendall(cord.encode('utf-8'))
-            x = random.randint(100, 1000)
 
             while True:
                 try:
@@ -48,8 +50,8 @@ class PlaneConnetion:
        #             logging.info(f"{self.plane.id}{self.plane.coordinate} Target x:{x}")
 
                     # 2 Send target
-                    
-                    cord={"target_coordinate": [x,100,1000]}
+                    target=self.plane.target_coordinate.coordinates()
+                    cord={"target_coordinate": target}
                     cord=json.dumps(cord)
                     self.conn.sendall(cord.encode('utf-8'))
                 except ConnectionResetError:

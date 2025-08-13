@@ -42,7 +42,8 @@ class PlaneClient():
                     # 4. Send current position
                     cord=self.plane.coordinate.send_json()
                     s.sendall(cord)
-                    print(self.plane.coordinate)
+                    print(f"Aktual coordinate{self.plane.coordinate}")
+                    print(f"Target coordinate {self.planecommmand._target_coordinate.coordinates()}")
 
                     # 5. Check for command
                     s.settimeout(0.5)

@@ -5,15 +5,16 @@ import logging
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from my_class.Planemodules.Coordinate import PlaneCoordinate
+from my_class.Airport.Airportmodule import AirportLandRunway, AirPortPlanes
 
 class Plane():
-    def __init__(self,id,coordinate:tuple):
+    def __init__(self,id,coordinate:tuple=(0,0,0)):
         """ID
         coordinate: Class PlaneCoordinate"""
         self.id=id
         self.coordinate=PlaneCoordinate(coordinate) #class coordintae
-        self.landing=False
         self.connection=None
+
 
     def __str__(self):
         return str([self.id , self.coordinate.coordinates()])
@@ -24,5 +25,17 @@ class Plane():
         else: 
             self.coordinate.update(x)
 
+class PlaneAirport(Plane):
 
+    def __init__(self,id,coordinate:tuple=(0,0,0)):
+        """ID
+        coordinate: Class PlaneCoordinate"""
+        super().__init__(id,coordinate)
+        
+        self.selected_runway:AirportLandRunway=None
+        self.target_coordinate=PlaneCoordinate(coordinate)
+
+    def get_target(self):
+        target=self.target_coordinate.coordinates()
+        return {"target_coordinate": (target)}
 
