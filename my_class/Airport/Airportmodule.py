@@ -18,6 +18,9 @@ class AirportLandRunway():
     def add_plane_in_que(self,plane):
         self.planes_to_landrunway.append(plane)
 
+    def __str__(self):
+        return f"AiportLandRunway Coordinates {self.coordinate.coordinates()}"
+
 
 
 class AirPortPlanes():
@@ -28,13 +31,21 @@ class AirPortPlanes():
     def __str__(self):
         return str(self.planes)
 
-    def add_plane(self, plane:Planemodules):
-        self.planes[plane.id]=plane
+    def add_plane(self, plane:PlaneAirport):
+        """Add a plane to the list"""
+        if type(plane)==PlaneAirport:
+            self.planes[plane.id]=plane
+        else:
+            logging.debug("Wrong class as asrgument")
 
     def remove_plane(self, plane:PlaneAirport):
-        key=plane.id
-        self.planes.pop(key,True)
-        logging.info(f"Plane {plane.id} has been removed")
+        """Remove a plane from the list"""
+        if type(plane)==PlaneAirport:
+            key=plane.id
+            self.planes.pop(key,True)
+            logging.info(f"Plane {plane.id} has been removed")
+        else:
+            logging.debug("Wrong class as asrgument")
 
 class RouterLandRundway():
     def __init__(self,airportplanes:AirPortPlanes,runways: list[AirportLandRunway]):
@@ -45,12 +56,13 @@ class RouterLandRundway():
         for plane in self.airportplanes.planes.values():
             plane:PlaneAirport
             if not plane.selected_runway:
-                plane.selected_runway, runway=self.select_runway()
+                runway=plane.selected_runway=self._select_runway() #set runway to the plane
                 runway:AirportLandRunway
                 runway.add_plane_in_que(plane)
             
     
-    def select_runway(self) -> AirportLandRunway | None:
+    def _select_runway(self) -> AirportLandRunway | None:
         if not self.runways:
             return None
+        # find runway with minimal numer of planes.
         return min(self.runways, key=lambda r: len(r.planes_to_landrunway))

@@ -1,4 +1,4 @@
-lista = [1, 2,2, 3, 4]
+lista = [1, 2, 3, 4]
 
 # BŁĘDNE podejście
 for x in lista:

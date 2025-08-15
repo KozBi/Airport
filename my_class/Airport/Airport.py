@@ -7,21 +7,20 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from my_class.Planemodules.Planemodule import PlaneAirport
 from my_class.Airport.AirportArea import AirportArea
 from my_class.Airport.AirportAutopilot import AirportAutopilot
-from my_class.Airport.Airportmodule import AirportLandRunway, AirPortPlanes
+from my_class.Airport.Airportmodule import AirportLandRunway, AirPortPlanes,RouterLandRundway
 from my_class.DataBase.DataBaseLog import AirportLogbook
 from GUI.GUI import AirPortGUI
 
 class Airport():
-    def __init__(self):
+    def __init__(self,runways:list[AirportLandRunway]):
         self.airportarea=AirportArea()
         self.airportplanes=AirPortPlanes()
         self.airportgui=AirPortGUI(self.airportplanes)
-      #  self.airportautopilot=AirportAutopilot()
-     #   self.airportlandrunway=AirportLandRunway()
+        self.runways=runways
+        self.airportlandrunway=RouterLandRundway(self.airportplanes,self.runways)
+        self.airportautopilot=AirportAutopilot(self.airportplanes)
         
         self.airportlogbook=AirportLogbook() #create a log 
-
-
     
     def get_new_plane(self):
         """Return: Plane object"""
