@@ -3,13 +3,15 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.animation import FuncAnimation
 from my_class.Airport.Airportmodule import AirPortPlanes
+from my_class.Airport.Airport import AirportAutopilot
 from my_class.Planemodules.Planemodule import Plane
 import time
 import logging
 
 class AirPortGUI:
-    def __init__(self,planes=AirPortPlanes):
+    def __init__(self,planes=AirPortPlanes,autopilot=AirportAutopilot):
         self.allplanes:AirPortPlanes=planes
+        self.autopilot=autopilot
         self.points = []
         self.labels = []
         self.texts = []
@@ -35,9 +37,8 @@ class AirPortGUI:
 
     def _update(self,frame):
        
-
-        # for plane in self.allplanes.planes.values():
-        #     print(plane.coordinate.coordinates())
+        #start autopilot
+        self.autopilot.start()
 
         1 # Initializate data
         self.points = []

@@ -6,6 +6,7 @@ import time
 
 from my_class.ServerConnection import ServerConnetions
 from my_class.Airport.Airport import Airport
+from my_class.Airport.Airportmodule import AirportLandRunway
 
 HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
@@ -20,12 +21,13 @@ logging.getLogger('matplotlib').setLevel(logging.WARNING)
 class Server:
     def __init__(self):
 
-
-        self.airport=Airport() #whole logic
+        self.runways=[AirportLandRunway(2500,4000),AirportLandRunway(6000,4000)]
+        self.airport=Airport(self.runways) #whole logic
         self.servcon=ServerConnetions(self.airport,MAX_PLANES) # handle connections to planes
-        self.response=None
+   #     self.response=None
         self.connection_checker = threading.Thread(target=self.check_connetions,daemon=True)
         self.connection_checker.start()
+
 
     def start_server(self):
 
@@ -52,13 +54,14 @@ class Server:
             time.sleep(5)  # check every 5 second
             self.servcon.remove_connection()
 
-    def start_gui(self):
-        self.airport.start_gui() #start GUI
+    def start_airport(self):
+        print("WTF1")
+        self.airport.start()
 
 
 if __name__ == "__main__":
     server=Server()
     threading.Thread(target=server.start_server, daemon=True).start()
-    server.start_gui()  # GUI must be called in main thread
+    server.start_airport()  # GUI must be called in main thread
 
     

@@ -15,10 +15,10 @@ class Airport():
     def __init__(self,runways:list[AirportLandRunway]):
         self.airportarea=AirportArea()
         self.airportplanes=AirPortPlanes()
-        self.airportgui=AirPortGUI(self.airportplanes)
         self.runways=runways
         self.airportlandrunway=RouterLandRundway(self.airportplanes,self.runways)
-        self.airportautopilot=AirportAutopilot(self.airportplanes)
+        self.airportautopilot=AirportAutopilot(self.airportplanes,self.airportlandrunway)
+        self.airportgui=AirPortGUI(self.airportplanes,self.airportautopilot)
         
         self.airportlogbook=AirportLogbook() #create a log 
     
@@ -40,7 +40,8 @@ class Airport():
         self.airportplanes.remove_plane(plane)
 
 
-    def start_gui(self):
+    def start(self):
         """Start a GUI"""
         self.airportgui.show()
+
 

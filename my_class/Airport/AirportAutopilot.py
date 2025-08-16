@@ -20,7 +20,7 @@ class AirportAutopilot():
         for plane in self.allplanes.planes.values():
             plane:PlaneAirport
             if  plane.selected_runway:
-                new=(plane.selected_runway.coordinate.coordinates())
+                new=plane.selected_runway.coordinate.coordinates()
                 plane.target_coordinate.set(new)
 
 

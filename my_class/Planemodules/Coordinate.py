@@ -1,5 +1,7 @@
 import logging
 import json
+import numpy as np
+
 
 class Coordinate():
     def __init__(self,coordinate:tuple=(0,0,0)):
@@ -24,6 +26,9 @@ class Coordinate():
     
     def get_list_coordinates(self):
         return [self.width,self.length,self.height]
+    
+    def get_numpy_coordinate(self):
+        return np.array([self.width,self.length,self.height])
 
 class PlaneCoordinate(Coordinate):
 

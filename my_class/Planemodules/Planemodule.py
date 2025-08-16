@@ -32,7 +32,7 @@ class PlaneAirport(Plane):
         coordinate: Class PlaneCoordinate"""
         super().__init__(id,coordinate)
         
-        self.selected_runway=None
+        self.selected_runway=None #class runway that already selected
         self.target_coordinate=PlaneCoordinate(coordinate)
 
     def get_target(self):

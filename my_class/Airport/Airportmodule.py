@@ -1,6 +1,7 @@
 import sys
 import os
 import logging
+import numpy as np
 
 from my_class import Planemodules
 from my_class.Planemodules.Planemodule import PlaneAirport
@@ -55,14 +56,14 @@ class RouterLandRundway():
     def start(self):
         for plane in self.airportplanes.planes.values():
             plane:PlaneAirport
-            if not plane.selected_runway:
-                runway=plane.selected_runway=self._select_runway() #set runway to the plane
+            if plane.selected_runway is None:
+                runway=plane.selected_runway=self._select_runway(plane) #set runway to the plane
                 runway:AirportLandRunway
                 runway.add_plane_in_que(plane)
             
     
-    def _select_runway(self) -> AirportLandRunway | None:
-        if not self.runways:
-            return None
-        # find runway with minimal numer of planes.
-        return min(self.runways, key=lambda r: len(r.planes_to_landrunway))
+    def _select_runway(self,plane:PlaneAirport) -> AirportLandRunway | None:
+        plane_pos=plane.coordinate.get_numpy_coordinate()
+        # select the closest runway using np.py np.linalg.norm calculate vector norm(lenght)
+        return min(self.runways, key=lambda r: np.linalg.norm(plane_pos-r.coordinate.get_numpy_coordinate()))
+    

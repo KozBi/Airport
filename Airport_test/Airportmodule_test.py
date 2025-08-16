@@ -4,15 +4,15 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from my_class.Planemodules.Planemodule import Plane
+from my_class.Planemodules.Planemodule import PlaneAirport
 from my_class.Airport.Airportmodule import AirPortPlanes
 
 
 class TestAirPortPlanes(unittest.TestCase):
 
     def setUp(self):
-        self.dummyplanes=[Plane(1,(10000,0,0)),Plane(2,(0,10000,0)),Plane(3,(0,0,5000))]
-      #  self.plane0-=self.dummyplanes[0]
+        self.dummyplanes=[PlaneAirport(1,(10000,0,0)),PlaneAirport(2,(0,10000,0)),PlaneAirport(3,(0,0,5000))]
+     #   self.plane0-=self.dummyplanes[0]
         self.plane1=self.dummyplanes[1]
         self.plane3=self.dummyplanes[2]
         self.planes=AirPortPlanes()

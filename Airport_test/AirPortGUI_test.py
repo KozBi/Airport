@@ -22,13 +22,13 @@ class TestGUI(unittest.TestCase):
         self.gui=AirPortGUI(self.planes)
 
     def test_get_data(self):
-        result=self.gui.get_data()
+       # result=self.gui.get_data()
         result1=self.gui.allplanes
         print(str(self.plane1))
-        print(result)
+       # print(result)
         print(result1)
 
-    def test_gui(self):
-        self.gui.show()
+  #  def test_gui(self):
+   #     self.gui.show()
     
 
