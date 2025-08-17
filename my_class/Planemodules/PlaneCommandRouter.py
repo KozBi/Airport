@@ -13,7 +13,7 @@ class PlaneCommandRouter():
         self.plane=plane
         self.planecommand=PlaneCommand(self.plane.coordinate)
         self._target_coordinate=PlaneCoordinate() #dummy target coordinate to not create all the time a new object
-
+        self.dissconect=False 
 
     def command(self,command:dict):
         if command.get("target_coordinate"):
@@ -21,7 +21,10 @@ class PlaneCommandRouter():
             # 1. set a new coordianate 2. call move_toward
             self._target_coordinate.set(self.coordinate_target)
             self.planecommand.move_toward(self._target_coordinate)
-   
+
+            
+        if "release_disc" in command and command["release_disc"]:
+            self.dissconect = True
 
 class PlaneCommand():
     def __init__(self,crd:PlaneCoordinate):
@@ -32,7 +35,7 @@ class PlaneCommand():
         self.finial_crd=None
 
 
-    def move_toward(self, crd:Coordinate , speed:int=10):
+    def move_toward(self, crd:Coordinate , speed:int=70):
         # this function do generator if is called once again generator is changed
         if self.generator is None or self.finial_crd != crd:
             self.finial_crd = crd

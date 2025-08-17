@@ -5,7 +5,6 @@ import logging
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from my_class.Planemodules.Coordinate import PlaneCoordinate
-#from my_class.Airport.Airportmodule import AirportLandRunway, AirPortPlanes
 
 class Plane():
     def __init__(self,id,coordinate:tuple=(0,0,0)):
@@ -39,3 +38,10 @@ class PlaneAirport(Plane):
         target=self.target_coordinate.coordinates()
         return {"target_coordinate": (target)}
 
+    def landed(self):
+        """Check if plane hit the finial destination"""
+        aktual=self.coordinate.coordinates() 
+        final_destination=self.selected_runway.coordinate.coordinates()
+
+        if aktual==final_destination:
+            return True

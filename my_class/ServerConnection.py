@@ -51,16 +51,22 @@ class PlaneConnetion:
 
                     # 2 Send target
                     target=self.plane.target_coordinate.coordinates()
-                    cord={"target_coordinate": target}
-                    cord=json.dumps(cord)
-                    self.conn.sendall(cord.encode('utf-8'))
+                    message={"target_coordinate": target}
+
+                    # 2a If plane landed - release shut down the connection
+                    if self.plane.landed():
+                          message={"release_disc": True}  
+
+                    message=json.dumps(message)
+                    self.conn.sendall(message.encode('utf-8'))
                 except ConnectionResetError:
                     logging.info("Client connettion shut down, plane removed")
                     self.connetion_end = True
                     return False
                 except Exception as e:
                     self.connetion_end = True
-                    logging.debug(f"Error: {e}") #needs to be debug        
+                    logging.debug(f"Error: {e}") #needs to be debug 
+                    return False       
 
 
 

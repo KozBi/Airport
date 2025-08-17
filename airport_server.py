@@ -13,6 +13,7 @@ PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
 VERSION = "0.0.1"
 CREATION_DATE = datetime.now()
 MAX_PLANES=100
+RUNWAYS=[AirportLandRunway(2500,4000),AirportLandRunway(6000,4000)]
 
 logging.basicConfig(level=logging.DEBUG)
 # Clear logs only from matplotlib
@@ -21,7 +22,7 @@ logging.getLogger('matplotlib').setLevel(logging.WARNING)
 class Server:
     def __init__(self):
 
-        self.runways=[AirportLandRunway(2500,4000),AirportLandRunway(6000,4000)]
+        self.runways=RUNWAYS
         self.airport=Airport(self.runways) #whole logic
         self.servcon=ServerConnetions(self.airport,MAX_PLANES) # handle connections to planes
    #     self.response=None
@@ -55,7 +56,6 @@ class Server:
             self.servcon.remove_connection()
 
     def start_airport(self):
-        print("WTF1")
         self.airport.start()
 
 

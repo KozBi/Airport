@@ -3,21 +3,19 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.animation import FuncAnimation
 from my_class.Airport.Airportmodule import AirPortPlanes
-from my_class.Airport.Airport import AirportAutopilot
-from my_class.Planemodules.Planemodule import Plane
-import time
-import logging
+from my_class.Airport.Airport import AirportAutopilot, AirportLandRunway
 
 class AirPortGUI:
     def __init__(self,planes=AirPortPlanes,autopilot=AirportAutopilot):
         self.allplanes:AirPortPlanes=planes
-        self.autopilot=autopilot
+        self.autopilot:AirportAutopilot=autopilot
         self.points = []
         self.labels = []
         self.texts = []
 
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(111, projection='3d')
+        self._draw_runways()
 
         # Scatter plot
         self.scat = self.ax.scatter(
@@ -75,6 +73,17 @@ class AirPortGUI:
 
         return self.scat, *self.texts
     
+    def _draw_runways(self):
+        for runway in self.autopilot.runways.runways:
+            runway:AirportLandRunway
+            start = runway.coordinate.get_list_coordinates()
+            end = start + np.array([0, 2000, 0]) #lengh of the runways 2km
+            self.ax.plot(
+                [start[0], end[0]],
+                [start[1], end[1]],
+                [start[2], end[2]],
+                color="purple", linewidth=5
+            )
 
     def show(self):
         plt.show()

@@ -13,7 +13,8 @@ from GUI.GUI import AirPortGUI
 
 class Airport():
     def __init__(self,runways:list[AirportLandRunway]):
-        self.airportarea=AirportArea()
+        # to do , airportarea send to the GUI INI
+        self.airportarea=AirportArea() 
         self.airportplanes=AirPortPlanes()
         self.runways=runways
         self.airportlandrunway=RouterLandRundway(self.airportplanes,self.runways)

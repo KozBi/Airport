@@ -5,12 +5,13 @@ from my_class.Planemodules.Planemodule import Plane
 from my_class.Planemodules.PlaneCommandRouter import PlaneCommandRouter
 import time
 import logging
-import random
+import random,threading
 HOST = "127.0.0.1"  # The server hostname or IP address
 PORT = 65432  # The port used by the server
 
 
 start_coordinate=None
+BORDER_COORDINATE=(2000, 5000)
 
 class PlaneClient():
 
@@ -42,8 +43,8 @@ class PlaneClient():
                     # 4. Send current position
                     cord=self.plane.coordinate.send_json()
                     s.sendall(cord)
-                    print(f"Aktual coordinate{self.plane.coordinate}")
-                    print(f"Target coordinate {self.planecommmand._target_coordinate.coordinates()}")
+                   # print(f"Aktual coordinate{self.plane.coordinate}")
+                    #print(f"Target coordinate {self.planecommmand._target_coordinate.coordinates()}")
 
                     # 5. Check for command
                     s.settimeout(0.5)
@@ -55,9 +56,13 @@ class PlaneClient():
                     except socket.timeout:
                         logging.info("No data from Server")
                         continue
+                    # If plane already land, shut down the connection
+                    if self.planecommmand.dissconect:
+                        print("Plane hit the target, dissconnection")
+                        break
                 
 
-def generate_border_coordinate(max_coord=10000, altitude_range=(2500, 5000)):
+def generate_border_coordinate(max_coord=10000, altitude_range=BORDER_COORDINATE):
     # Generate x or y
     if random.choice([True, False]):  
         # if True then y is 0 or 10 000, x=random
@@ -67,11 +72,19 @@ def generate_border_coordinate(max_coord=10000, altitude_range=(2500, 5000)):
         x = random.choice([0, max_coord])
         y = random.randint(0, max_coord)
 
+    # * unpuck funnction tuple to 2 variables
     z = random.randint(*altitude_range)
     return (x, y, z)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
+    threads = []
+    for i in range(3):
+        client = PlaneClient(generate_border_coordinate())
+        t = threading.Thread(target=client.start_clinet, daemon=True)
+        threads.append(t)
+        t.start()
+        time.sleep(0.2) 
 
-    client=PlaneClient(generate_border_coordinate())
-    client.start_clinet()
+    for t in threads:
+        t.join()

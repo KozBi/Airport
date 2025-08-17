@@ -11,6 +11,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from my_class.Planemodules.Coordinate import Coordinate
 
 class AirportLandRunway():
+    "Single Runway"
     def __init__(self, width, lenght):
         """ width, length - runway starting points"""
         self.planes_to_landrunway:list[PlaneAirport]=[]
@@ -22,6 +23,10 @@ class AirportLandRunway():
     def __str__(self):
         return f"AiportLandRunway Coordinates {self.coordinate.coordinates()}"
 
+class Runwayarea():
+    """air corridor for the land runway"""
+    def __init__(self):
+        pass
 
 
 class AirPortPlanes():
@@ -49,6 +54,7 @@ class AirPortPlanes():
             logging.debug("Wrong class as asrgument")
 
 class RouterLandRundway():
+    """Runways managment class"""
     def __init__(self,airportplanes:AirPortPlanes,runways: list[AirportLandRunway]):
         self.airportplanes=airportplanes
         self.runways=runways
