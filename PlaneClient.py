@@ -1,7 +1,7 @@
 import socket
 import json
 from my_class.Planemodules.Coordinate import PlaneCoordinate
-from my_class.Planemodules.Planemodule import Plane
+from my_class.Planemodules.Planemodule import PlaneClinet
 from my_class.Planemodules.PlaneCommandRouter import PlaneCommandRouter
 import time
 import logging
@@ -13,11 +13,11 @@ PORT = 65432  # The port used by the server
 start_coordinate=None
 BORDER_COORDINATE=(2000, 5000)
 
-class PlaneClient():
+class Client():
 
     
     def __init__(self,start_coordinate:tuple=(0,0,0)):
-        self.plane=Plane(0,start_coordinate)
+        self.plane=PlaneClinet(0,start_coordinate)
         self.planecommmand=PlaneCommandRouter(self.plane)
 
         
@@ -37,14 +37,17 @@ class PlaneClient():
             while True:               
                     
                     # 3. Simulate move
-                    self.planecommmand.command(command) # movement
+                    self.planecommmand.handle_command(command) # movement
                     time.sleep(1)
 
                     # 4. Send current position
                     cord=self.plane.coordinate.send_json()
                     s.sendall(cord)
-                   # print(f"Aktual coordinate{self.plane.coordinate}")
-                    #print(f"Target coordinate {self.planecommmand._target_coordinate.coordinates()}")
+
+                    # 5. Fuel check
+                    if self.plane.fuel_check():
+                        # to do - log in database - crash
+                        self.planecommmand.dissconect
 
                     # 5. Check for command
                     s.settimeout(0.5)
@@ -52,11 +55,12 @@ class PlaneClient():
                         new_data = s.recv(2048)
                         if new_data:
                             command  = json.loads(new_data.decode('utf-8')) 
-                            self.planecommmand.command(command)
+                            self.planecommmand.handle_command(command)
                     except socket.timeout:
                         logging.info("No data from Server")
                         continue
                     # If plane already land, shut down the connection
+
                     if self.planecommmand.dissconect:
                         print("Plane hit the target, dissconnection")
                         break
@@ -80,7 +84,7 @@ def generate_border_coordinate(max_coord=10000, altitude_range=BORDER_COORDINATE
 if __name__ == "__main__":
     threads = []
     for i in range(3):
-        client = PlaneClient(generate_border_coordinate())
+        client = Client(generate_border_coordinate())
         t = threading.Thread(target=client.start_clinet, daemon=True)
         threads.append(t)
         t.start()

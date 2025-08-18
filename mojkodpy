@@ -1,14 +1,13 @@
-lista = [1, 2, 3, 4]
+sendjson={
+        "type": "position_update",
+        "position": [1,2,3]
+        }
 
-# BŁĘDNE podejście
-for x in lista:
-    if x % 2 == 0:
-        lista.remove(x)
-print(lista)  # [1, 3] — ale 3 zostało, bo iteracja się przesunęła
+sendjson1={
+        "type": "position_update",
+        "position": [1,2,3]
+        }
 
-# POPRAWNE podejście
-lista = [1, 2, 3, 4]
-for x in lista[:]:  # kopia listy
-    if x % 2 == 0:
-        lista.remove(x)
-print(lista)  # [1, 3] — teraz działa jak trzeba
+res=sendjson+sendjson1
+
+print(res)

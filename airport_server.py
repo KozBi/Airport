@@ -44,11 +44,16 @@ class Server:
 
 
     def get_new_plane_connetion(self,n_conn,n_addr):
-        plane=self.airport.get_new_plane()   
-        if plane:
-            self.servcon.get_new_connection(n_conn,n_addr,plane) #create a connetion to the plane
-        else:
-            logging.debug("Plane cannot be added to Database")
+        # 1 check if poolconnetion is not full
+        if self.servcon.connection_possbile():
+            #2 get a plane nummber (Inster new plane in DB and get a planne number)
+            plane=self.airport.get_new_plane()   
+            if plane:
+                # 3 estahblish a new connetion in a new threat
+                self.servcon.get_new_connection(n_conn,n_addr,plane) 
+            else:
+                logging.debug("Plane cannot be added to Database")
+        else: logging.info("Maximal number of clients reached, plane cannot land")
 
     def check_connetions(self):
         while True:
@@ -57,11 +62,23 @@ class Server:
 
     def start_airport(self):
         self.airport.start()
-
-
+          
 if __name__ == "__main__":
+
     server=Server()
-    threading.Thread(target=server.start_server, daemon=True).start()
+
+    # def test():
+    #     while True:
+    #         print(server.servcon.active_planesconnection())
+    #         time.sleep(1)
+
+    threading.Thread(target=server.start_server, daemon=True).start() #connetion in a different threat
+    #threading.Thread(target=test, daemon=True).start()
     server.start_airport()  # GUI must be called in main thread
+    
+
+
+
+    
 
     

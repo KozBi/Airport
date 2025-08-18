@@ -65,7 +65,7 @@ class PlaneConnetion:
                     return False
                 except Exception as e:
                     self.connetion_end = True
-                    logging.debug(f"Error: {e}") #needs to be debug 
+                  #  logging.debug(f"Error: {e}") #needs to be debug 
                     return False       
 
 
@@ -80,6 +80,10 @@ class ServerConnetions:
         self.airport_ref=airport_ref
 
         self.lock = threading.Lock()
+
+    def connection_possbile(self):
+        if len(self.connetions)<100:
+            return True
         
     def active_planesconnection(self):
         """Return number of aktiv connections"""

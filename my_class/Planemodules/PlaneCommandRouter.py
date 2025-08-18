@@ -6,25 +6,28 @@ from copy import deepcopy
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from my_class.Planemodules.Coordinate import PlaneCoordinate, Coordinate
-from my_class.Planemodules.Planemodule import Plane
+from my_class.Planemodules.Planemodule import PlaneClinet
 
 class PlaneCommandRouter():
-    def __init__(self,plane:Plane):
+    def __init__(self,plane:PlaneClinet):
         self.plane=plane
         self.planecommand=PlaneCommand(self.plane.coordinate)
         self._target_coordinate=PlaneCoordinate() #dummy target coordinate to not create all the time a new object
         self.dissconect=False 
 
-    def command(self,command:dict):
+    def handle_command(self,command:dict):
         if command.get("target_coordinate"):
             self.coordinate_target=command["target_coordinate"]
             # 1. set a new coordianate 2. call move_toward
             self._target_coordinate.set(self.coordinate_target)
             self.planecommand.move_toward(self._target_coordinate)
-
-            
+        
         if "release_disc" in command and command["release_disc"]:
             self.dissconect = True
+
+    def answer(self):
+        # wysylac caly czas koordynaty.. Chyba ze cos innego wtedy if i podmienic komende.
+        pass
 
 class PlaneCommand():
     def __init__(self,crd:PlaneCoordinate):
