@@ -13,6 +13,7 @@ class Plane():
         self.id=id
         self.coordinate=PlaneCoordinate(coordinate) #class coordintae
         self.connection=None
+        self.fuel=None
 
 
     def __str__(self):
@@ -53,6 +54,7 @@ class PlaneClinet(Plane):
 
         self.start_time=time.time()
         self.fuel=3*3600 # 3h
+        self.fuel=3*2 # 3h
 
     def fuel_check(self): 
         """Calculate fuel and return True if a tank ist empty"""

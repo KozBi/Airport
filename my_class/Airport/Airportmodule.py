@@ -25,7 +25,7 @@ class AirportLandRunway():
 
 class Runwayarea():
     """air corridor for the land runway"""
-    def __init__(self):
+    def __init__(self,coordinate:Coordinate):
         pass
 
 

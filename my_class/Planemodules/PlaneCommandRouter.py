@@ -3,6 +3,8 @@ import os
 import math
 from copy import deepcopy
 
+import json
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from my_class.Planemodules.Coordinate import PlaneCoordinate, Coordinate
@@ -27,7 +29,20 @@ class PlaneCommandRouter():
 
     def answer(self):
         # wysylac caly czas koordynaty.. Chyba ze cos innego wtedy if i podmienic komende.
-        pass
+        sendjson={
+        "type": "position_update",
+        "position": [self.plane.coordinate.width, self.plane.coordinate.length, self.plane.coordinate.height],
+        "fuel" : self.plane.fuel
+
+        }
+        # check if tank is not empty
+        if self.plane.fuel_check():
+            sendjson={
+            "type": "colission",
+            "reason":"Out of fuel"
+            }
+          #  self.dissconect=True
+        return (json.dumps(sendjson).encode('utf-8'))
 
 class PlaneCommand():
     def __init__(self,crd:PlaneCoordinate):

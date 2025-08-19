@@ -18,11 +18,11 @@ class PlaneConnetion:
         self.plane = plane
         self.connection_id = self.plane.id
         self.plane.connection=self #  Plane.connection jest ustawiane w konstruktorze PlaneConnection, więc nie robię tego wcześniej w Server
+        self.connetion_end = False
         self.planecomunicationjson=PlaneComuncationJson(self.plane)
-
         self.connection = threading.Thread(target=self.handle_connetion,daemon=True)
         self.connection.start()
-        self.connetion_end = False 
+         
     def handle_connetion(self):
         with self.conn:
             print(f"New connection established, Connected by {self.addr} and {self.conn}")
@@ -33,9 +33,7 @@ class PlaneConnetion:
             self.planecomunicationjson.handle_message(message)
             print(f"New Plane {self.plane.id}{self.plane.coordinate}")
 
-            # 1 Send target
-         ##   target=self.plane.target_coordinate.coordinates()
-           # cord={"target_coordinate": (target)}
+            # 2 Send target
             cord=self.plane.get_target()
             cord=json.dumps(cord)
             self.conn.sendall(cord.encode('utf-8'))
@@ -47,7 +45,6 @@ class PlaneConnetion:
                 
                     message = json.loads(data.decode('utf-8')) # receive from client a task
                     self.planecomunicationjson.handle_message(message)
-       #             logging.info(f"{self.plane.id}{self.plane.coordinate} Target x:{x}")
 
                     # 2 Send target
                     target=self.plane.target_coordinate.coordinates()
@@ -58,15 +55,20 @@ class PlaneConnetion:
                           message={"release_disc": True}  
 
                     message=json.dumps(message)
-                    self.conn.sendall(message.encode('utf-8'))
+                    self.conn.sendall(message.encode('utf-8')) 
+                
+                    # if client close the connetion it must be removed form pool as well
+                    if self.planecomunicationjson.shut_down:
+                        self.connetion_end=True
+                        return False  
+                    
                 except ConnectionResetError:
                     logging.info("Client connettion shut down, plane removed")
                     self.connetion_end = True
                     return False
                 except Exception as e:
                     self.connetion_end = True
-                  #  logging.debug(f"Error: {e}") #needs to be debug 
-                    return False       
+                    return False    
 
 
 
@@ -113,11 +115,18 @@ class PlaneComuncationJson():
         self.plane=plane
 
     def handle_message(self,msg:dict):
+        self.shut_down=False
 
         if isinstance(msg, dict):
             if msg["type"]=="position_update":
                 new_position=msg["position"]
                 self.plane.coordinate.set(new_position)
+                self.plane.fuel=msg["fuel"]
+
+            if msg["type"]=="colission":
+                self.shut_down=True
+                logging.info(f'Colission - reason: {msg["reason"]}')
+
         else: logging.CRITICAL("Command is not a dict. Programing Error")
        
 

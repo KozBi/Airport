@@ -27,7 +27,7 @@ class Client():
             print("Connected to the airport.")
 
             # 1. Send initial position
-            position = self.plane.coordinate.send_json()
+            position = self.planecommmand.answer()
             s.sendall(position)
 
             # 2. Receive target
@@ -40,9 +40,9 @@ class Client():
                     self.planecommmand.handle_command(command) # movement
                     time.sleep(1)
 
-                    # 4. Send current position
-                    cord=self.plane.coordinate.send_json()
-                    s.sendall(cord)
+                    # 4. Send answer
+                    answer=self.planecommmand.answer()
+                    s.sendall(answer)
 
                     # 5. Fuel check
                     if self.plane.fuel_check():

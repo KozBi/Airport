@@ -8,6 +8,8 @@ sendjson1={
         "position": [1,2,3]
         }
 
-res=sendjson+sendjson1
+res={}
+
+#jak dodac 2 te dict
 
 print(res)

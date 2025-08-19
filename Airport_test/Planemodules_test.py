@@ -23,7 +23,7 @@ class TestPlaneCommandRouter(unittest.TestCase):
     def test_move(self):    
         while True:
             command={"target_coordinate": (0,0,0)}
-            self.commandrouter.command(command)
+            self.commandrouter.handle_command(command)
             print (self.plane.coordinate.coordinates())
             if self.plane.coordinate.coordinates() ==(0,0,0):
                 self.assertEqual(self.plane.coordinate.coordinates(), (0,0,0))
@@ -38,7 +38,7 @@ class TestPlaneCommandRouter(unittest.TestCase):
                 #change destination after few steps
                 command={"target_coordinate": (100,0,0)}
 
-            self.commandrouter.command(command)
+            self.commandrouter.handle_command(command)
             print (self.plane.coordinate.coordinates())
 
             if self.plane.coordinate.coordinates() ==(100,000,0):
