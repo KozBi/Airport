@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from matplotlib.animation import FuncAnimation
 from my_class.Airport.Airportmodule import AirPortPlanes
 from my_class.Airport.Airport import AirportAutopilot, AirportLandRunway
@@ -83,6 +83,34 @@ class AirPortGUI:
                 [start[1], end[1]],
                 [start[2], end[2]],
                 color="purple", linewidth=5
+            )
+
+            # self.ax.fill_between(runway.corridor.e_x, runway.corridor.e_y, runway.corridor.e_z,
+            #                       runway.corridor.s_x, runway.corridor.s_y, runway.corridor.s_z, alpha=0.5,color='C0')
+            # self.ax.plot(
+            #     [runway.corridor.s_x, runway.corridor.e_x],
+            #     [runway.corridor.s_y, runway.corridor.e_y],
+            #     [runway.corridor.s_z, runway.corridor.e_z],
+            #     linewidth=2, color='C0'
+            # )
+            corr = runway.corridor
+            x = [corr.s_x, corr.e_x]
+            y = [corr.s_y, corr.e_y]
+            z = [corr.s_z, corr.e_z]
+            vertices = [
+            # dolna podstawa
+            [(x[0], y[0], z[0]), (x[1], y[0], z[0]), (x[1], y[1], z[0]), (x[0], y[1], z[0])],
+            # górna podstawa
+            [(x[0], y[0], z[1]), (x[1], y[0], z[1]), (x[1], y[1], z[1]), (x[0], y[1], z[1])],
+            # ściany boczne
+            [(x[0], y[0], z[0]), (x[1], y[0], z[0]), (x[1], y[0], z[1]), (x[0], y[0], z[1])],
+            [(x[0], y[1], z[0]), (x[1], y[1], z[0]), (x[1], y[1], z[1]), (x[0], y[1], z[1])],
+            [(x[0], y[0], z[0]), (x[0], y[1], z[0]), (x[0], y[1], z[1]), (x[0], y[0], z[1])],
+            [(x[1], y[0], z[0]), (x[1], y[1], z[0]), (x[1], y[1], z[1]), (x[1], y[0], z[1])],
+        ]
+
+            self.ax.add_collection3d(
+                Poly3DCollection(vertices, facecolors="C0", linewidths=1, edgecolors="black", alpha=0.3)
             )
 
     def show(self):

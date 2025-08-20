@@ -5,6 +5,7 @@ import numpy as np
 
 from my_class import Planemodules
 from my_class.Planemodules.Planemodule import PlaneAirport
+from my_class.Airport.Area import RunwayArea
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -15,19 +16,26 @@ class AirportLandRunway():
     def __init__(self, width, lenght):
         """ width, length - runway starting points"""
         self.planes_to_landrunway:list[PlaneAirport]=[]
-        self.coordinate=Coordinate((width,lenght,0))
+        self.coordinate:Coordinate=Coordinate((width,lenght,0))
+        self.corridor:RunwayArea=RunwayArea(self)
+        self.plane_to_cooridor=None
+
+    def start_land(self):
+        if self.plane_to_cooridor is not None or self.plane_to_cooridor.landed():
+            try:
+                self._add_plane_to_cooridor(self.planes_to_landrunway[0])
+                print("Nowy samolot do lawaniwa test test")
+            except: pass #no plane
     
+    def _add_plane_to_cooridor(self,plane):
+        """Select next plane to land"""
+        self.planes_to_coordior=plane
+
     def add_plane_in_que(self,plane):
         self.planes_to_landrunway.append(plane)
 
     def __str__(self):
         return f"AiportLandRunway Coordinates {self.coordinate.coordinates()}"
-
-class Runwayarea():
-    """air corridor for the land runway"""
-    def __init__(self,coordinate:Coordinate):
-        pass
-
 
 class AirPortPlanes():
     def __init__(self):
@@ -66,6 +74,11 @@ class RouterLandRundway():
                 runway=plane.selected_runway=self._select_runway(plane) #set runway to the plane
                 runway:AirportLandRunway
                 runway.add_plane_in_que(plane)
+
+        for rway in self.runways:
+            rway.start_land()
+
+       
             
     
     def _select_runway(self,plane:PlaneAirport) -> AirportLandRunway | None:

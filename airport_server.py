@@ -13,7 +13,7 @@ PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
 VERSION = "0.0.1"
 CREATION_DATE = datetime.now()
 MAX_PLANES=100
-RUNWAYS=[AirportLandRunway(2500,4000),AirportLandRunway(6000,4000)]
+RUNWAYS=[AirportLandRunway(2500,6000),AirportLandRunway(6000,5000)]
 
 logging.basicConfig(level=logging.DEBUG)
 # Clear logs only from matplotlib

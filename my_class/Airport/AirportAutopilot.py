@@ -20,8 +20,14 @@ class AirportAutopilot():
         for plane in self.allplanes.planes.values():
             plane:PlaneAirport
             if  plane.selected_runway:
+                print("test")
                 new=plane.selected_runway.coordinate.coordinates()
-                plane.target_coordinate.set(new)
+
+                # check if plane is already in cooridor
+                if plane.selected_runway.plane_to_cooridor:
+                    new=plane.selected_runway.corridor.start_coordinate()
+                    print("zmienam koordynaty")
+            plane.target_coordinate.set(new)
 
 
 
