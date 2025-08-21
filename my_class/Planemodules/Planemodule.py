@@ -56,7 +56,7 @@ class PlaneClinet(Plane):
         self.fuel=3*3600 # 3h
       #  self.fuel=3*2 # 3h
 
-    def fuel_check(self): 
+    def fuel_check(self) -> bool: 
         """Calculate fuel and return True if a tank ist empty"""
         # 1 set a time
         now=time.time()

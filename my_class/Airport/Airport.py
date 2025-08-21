@@ -6,7 +6,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from my_class.Planemodules.Planemodule import PlaneAirport
 
-from my_class.Airport.AirportAutopilot import AirportAutopilot
+from my_class.Airport.AirportAutopilot import Autopilot
 from my_class.Airport.Airportmodule import AirportLandRunway, AirPortPlanes,RouterLandRundway
 from my_class.DataBase.DataBaseLog import AirportLogbook
 from GUI.GUI import AirPortGUI
@@ -19,7 +19,7 @@ class Airport():
         self.airportplanes=AirPortPlanes()
         self.runways=runways
         self.airportlandrunway=RouterLandRundway(self.airportplanes,self.runways)
-        self.airportautopilot=AirportAutopilot(self.airportplanes,self.airportlandrunway)
+        self.airportautopilot=Autopilot(self.airportplanes,self.airportlandrunway)
         self.airportgui=AirPortGUI(self.airportplanes,self.airportautopilot)
         
         self.airportlogbook=AirportLogbook() #create a log 

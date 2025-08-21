@@ -3,12 +3,12 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from matplotlib.animation import FuncAnimation
 from my_class.Airport.Airportmodule import AirPortPlanes
-from my_class.Airport.Airport import AirportAutopilot, AirportLandRunway
+from my_class.Airport.Airport import Autopilot, AirportLandRunway
 
 class AirPortGUI:
-    def __init__(self,planes=AirPortPlanes,autopilot=AirportAutopilot):
+    def __init__(self,planes=AirPortPlanes,autopilot=Autopilot):
         self.allplanes:AirPortPlanes=planes
-        self.autopilot:AirportAutopilot=autopilot
+        self.autopilot:Autopilot=autopilot
         self.points = []
         self.labels = []
         self.texts = []

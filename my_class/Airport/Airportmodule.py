@@ -18,24 +18,30 @@ class AirportLandRunway():
         self.planes_to_landrunway:list[PlaneAirport]=[]
         self.coordinate:Coordinate=Coordinate((width,lenght,0))
         self.corridor:RunwayArea=RunwayArea(self)
-        self.plane_to_cooridor=None
+        self.plane_to_cooridor:PlaneAirport=None
 
     def start_land(self):
-        if self.plane_to_cooridor is not None or self.plane_to_cooridor.landed():
-            try:
-                self._add_plane_to_cooridor(self.planes_to_landrunway[0])
-                print("Nowy samolot do lawaniwa test test")
-            except: pass #no plane
+        
+    #        try:
+                if len(self.planes_to_landrunway)!=0:
+                    if self.plane_to_cooridor is None or self.plane_to_cooridor.landed():
+                        self._add_plane_to_cooridor(self.planes_to_landrunway[0])
+                    
+         #   except: pass #no plane
     
     def _add_plane_to_cooridor(self,plane):
         """Select next plane to land"""
-        self.planes_to_coordior=plane
+        self.plane_to_cooridor=plane
 
     def add_plane_in_que(self,plane):
         self.planes_to_landrunway.append(plane)
 
     def __str__(self):
         return f"AiportLandRunway Coordinates {self.coordinate.coordinates()}"
+    
+    def check_plane_in_corridor(self):
+        pass
+
 
 class AirPortPlanes():
     def __init__(self):
@@ -78,9 +84,7 @@ class RouterLandRundway():
         for rway in self.runways:
             rway.start_land()
 
-       
-            
-    
+                
     def _select_runway(self,plane:PlaneAirport) -> AirportLandRunway | None:
         plane_pos=plane.coordinate.get_numpy_coordinate()
         # select the closest runway using np.py np.linalg.norm calculate vector norm(lenght)
