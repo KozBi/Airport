@@ -18,20 +18,21 @@ class AirportLandRunway():
         self.planes_to_landrunway:list[PlaneAirport]=[]
         self.coordinate:Coordinate=Coordinate((width,lenght,0))
         self.corridor:RunwayArea=RunwayArea(self)
-        self.plane_to_cooridor:PlaneAirport=None
+        self.plane_cooridor:PlaneAirport=None
 
     def start_land(self):
         
     #        try:
                 if len(self.planes_to_landrunway)!=0:
-                    if self.plane_to_cooridor is None or self.plane_to_cooridor.landed():
+                    if self.plane_cooridor is None or self.plane_cooridor.landed():
                         self._add_plane_to_cooridor(self.planes_to_landrunway[0])
                     
          #   except: pass #no plane
     
     def _add_plane_to_cooridor(self,plane):
         """Select next plane to land"""
-        self.plane_to_cooridor=plane
+        self.plane_cooridor=plane
+
 
     def add_plane_in_que(self,plane):
         self.planes_to_landrunway.append(plane)
@@ -40,7 +41,10 @@ class AirportLandRunway():
         return f"AiportLandRunway Coordinates {self.coordinate.coordinates()}"
     
     def check_plane_in_corridor(self):
-        pass
+   #     if self.plane_cooridor is not None:
+            return self.corridor.contain(self.plane_cooridor.coordinate)
+
+
 
 
 class AirPortPlanes():
@@ -66,6 +70,8 @@ class AirPortPlanes():
             logging.info(f"Plane {plane.id} has been removed")
         else:
             logging.debug("Wrong class as asrgument")
+
+
 
 class RouterLandRundway():
     """Runways managment class"""

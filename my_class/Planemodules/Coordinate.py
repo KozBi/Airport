@@ -13,7 +13,14 @@ class Coordinate():
     def __str__(self):
         return f"x:{self.width}, y:{self.length}, z:{self.height}"
     
-    def coordinates(self):
+    def __eq__(self, other):
+        if isinstance(other, Coordinate):
+            return self.coordinates() == other.coordinates()
+        if isinstance(other, tuple):
+            return self.coordinates() == other
+        return NotImplemented
+    
+    def coordinates(self)->tuple:
         "Return tuple (width,lenght,height)"
         return (self.width,self.length,self.height)
 

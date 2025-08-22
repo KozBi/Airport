@@ -23,8 +23,11 @@ class Autopilot():
                 new=plane.selected_runway.coordinate.coordinates()
 
                 # check if plane is already in cooridor
-                if plane.selected_runway.plane_to_cooridor:
+                if plane.selected_runway.plane_cooridor:
                     new=plane.selected_runway.corridor.start_coordinate()
+                    if plane.selected_runway.check_plane_in_corridor():
+                        new=plane.selected_runway.coordinate.coordinates()
+
             plane.target_coordinate.set(new)
 
 
