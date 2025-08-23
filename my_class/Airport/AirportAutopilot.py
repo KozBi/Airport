@@ -17,18 +17,30 @@ class Autopilot():
         # select runway for all planes
         self.runways.start()
         # set a target cooridante for a plane
-        for plane in self.allplanes.planes.values():
-            plane:PlaneAirport
-            if  plane.selected_runway:
-                new=plane.selected_runway.coordinate.coordinates()
 
-                # check if plane is already in cooridor
-                if plane.selected_runway.plane_cooridor:
-                    new=plane.selected_runway.corridor.start_coordinate()
-                    if plane.selected_runway.check_plane_in_corridor():
-                        new=plane.selected_runway.coordinate.coordinates()
 
-            plane.target_coordinate.set(new)
+    
+
+
+    def run_planes(self):
+        pass
+            # for plane in self.allplanes.planes.values():
+            #     plane:PlaneAirport
+                
+            #     #  new=plane.selected_runway.coordinate.coordinates()
+            #     if  plane.selected_runway:
+            #         # if plane has destitatnion a cooridor set a target
+            #         if plane.selected_runway.
+
+            #         if plane.selected_runway.plane_cooridor:
+            #             new=plane.selected_runway.corridor.start_coordinate()
+
+            #             #if plane is alraedy in cooridot set a final tartger
+            #             if plane.selected_runway.check_plane_in_corridor():
+            #                 new=plane.selected_runway.coordinate.coordinates()
+                    
+                            
+            #     plane.set_target(new)
 
 
 

@@ -54,6 +54,7 @@ class PlaneCommand():
 
 
     def move_toward(self, crd:Coordinate , speed:int=70):
+        speed=200
         # this function do generator if is called once again generator is changed
         if self.generator is None or self.finial_crd != crd:
             self.finial_crd = crd

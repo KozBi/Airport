@@ -34,6 +34,10 @@ class PlaneAirport(Plane):
         self.selected_runway=None #class runway that already selected
         self.target_coordinate=PlaneCoordinate(coordinate)
 
+    def set_target(self,coordintate:tuple):
+        """Set target for a plane"""
+        self.target_coordinate.set(coordintate)
+
     def get_target(self):
         target=self.target_coordinate.coordinates()
         return {"target_coordinate": (target)}

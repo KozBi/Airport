@@ -83,7 +83,7 @@ def generate_border_coordinate(max_coord=10000, altitude_range=BORDER_COORDINATE
 
 if __name__ == "__main__":
     threads = []
-    for i in range(1):
+    for i in range(2):
         client = Client(generate_border_coordinate())
         t = threading.Thread(target=client.start_clinet, daemon=True)
         threads.append(t)
