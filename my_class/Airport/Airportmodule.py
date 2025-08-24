@@ -11,70 +11,67 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from my_class.Planemodules.Coordinate import Coordinate
 
-class AirportLandRunway():
-    "Single Runway"
-    def __init__(self, width, lenght):
-        """ width, length - runway starting points"""
-        self.planes_to_landrunway:list[PlaneAirport]=[]
-        self.coordinate:Coordinate=Coordinate((width,lenght,0))
-        self.corridor:RunwayArea=RunwayArea(self)
-        self.plane_cooridor:PlaneAirport=None
-        self.next_plane_cooridor:PlaneAirport=None
+class AirportLandRunway:
+    """Single runway that manages a landing queue of planes."""
+
+    def __init__(self, width, length):
+        # Queue of planes waiting to land (FIFO order)
+        self.queue: list[PlaneAirport] = []
+
+        # Runway starting coordinate
+        self.coordinate: Coordinate = Coordinate((width, length, 0))
+
+        # Corridor that leads to the runway
+        self.corridor: RunwayArea = RunwayArea(self)
 
     def start_land(self):
-        
-        # add plane to land
-        if len(self.planes_to_landrunway)!=0:
-            if self.plane_cooridor is None or self._plane_hit_runway():
-                self._add_plane_to_cooridor(self.planes_to_landrunway[0])
+        """Handle landing process for planes in the queue."""
 
-        # add next plane to land if plane is nearly to land
-        if len(self.planes_to_landrunway)>=2:
-            if self.plane_cooridor is None or self.check_plane_in_corridor():
-                self._add_next_plane_to_cooridor(self.planes_to_landrunway[1])
+        # If no planes are waiting -> do nothing
+        if not self.queue:
+            return
 
-        # set final target
-        if self.plane_cooridor and self.check_plane_in_corridor():
-            self.plane_cooridor.set_target(self.coordinate.coordinates())
-            # set next plane to cooridor
-            if self.next_plane_cooridor:
-                self.next_plane_cooridor.set_target(self.corridor.start_coordinate())
-                        
-        # set target for coridor
-        elif self.plane_cooridor:
-            self.plane_cooridor.set_target(self.corridor.start_coordinate())
-                        
+        plane = self.queue[0]  # first plane in queue
 
+        # Check if plane has already reached the runway
+        if self._plane_hit_runway(plane):
+            self.queue.pop(0)  # remove landed plane from the queue
 
-    def _plane_hit_runway(self):
-        """Check if plane is in final destination"""
+            # If queue is now empty -> nothing else to do
+            if not self.queue:
+                return
 
-        if self.plane_cooridor.coordinate.coordinates() == self.coordinate.coordinates():
-            print(self.plane_cooridor.coordinate.coordinates())
-            print(self.coordinate.coordinates())
-            self.plane_cooridor.landed()
+            plane = self.queue[0]  # update current active plane
+
+        # Set target for the first plane
+        if self.check_plane_in_corridor(plane):
+            # If already in corridor -> direct to runway
+            plane.set_target(self.coordinate.coordinates())
+
+            # If another plane is waiting -> direct it to corridor entry
+            if len(self.queue) > 1:
+                self.queue[1].set_target(self.corridor.start_coordinate())
+        else:
+            # If not in corridor yet -> send it to corridor entry
+            plane.set_target(self.corridor.start_coordinate())
+
+    def _plane_hit_runway(self, plane: PlaneAirport) -> bool:
+        """Check if a plane has reached the runway."""
+        if plane.coordinate.coordinates() == self.coordinate.coordinates():
+            plane.landed()  # mark plane as landed
             return True
-        
+        return False
 
-    def _add_plane_to_cooridor(self,plane):
-        """Select plane to land"""
-        self.plane_cooridor=plane
-
-
-    def _add_next_plane_to_cooridor(self,plane):
-        """Select plane to land"""
-        self.next_plane_cooridor=plane
-        
-
-    def add_plane_in_que(self,plane):
-        self.planes_to_landrunway.append(plane)
+    def add_plane_to_queue(self, plane: PlaneAirport):
+        """Add new plane to the landing queue."""
+        self.queue.append(plane)
 
     def __str__(self):
         return f"AiportLandRunway Coordinates {self.coordinate.coordinates()}"
     
-    def check_plane_in_corridor(self):
+    def check_plane_in_corridor(self,plane):
         """Check inf plane cooridor is in cooridor area"""
-        return self.corridor.contain(self.plane_cooridor.coordinate)
+        return self.corridor.contain(plane.coordinate)
     
 
 
@@ -118,7 +115,7 @@ class RouterLandRundway():
             if plane.selected_runway is None:
                 runway=plane.selected_runway=self._select_runway(plane) #set runway to the plane
                 runway:AirportLandRunway
-                runway.add_plane_in_que(plane)
+                runway.add_plane_to_queue(plane)
 
         for rway in self.runways:
             rway.start_land()

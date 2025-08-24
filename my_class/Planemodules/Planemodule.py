@@ -50,6 +50,14 @@ class PlaneAirport(Plane):
         if aktual==final_destination:
             return True
         
+    def without_target(self):
+        return self.target_coordinate.coordinates()==(0,0,0)
+    
+
+    def on_target(self):
+        return self.target_coordinate.coordinates()==self.coordinate.coordinates()
+
+        
 class PlaneClinet(Plane):
 
     def __init__(self,id,coordinate:tuple=(0,0,0)):

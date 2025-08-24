@@ -12,35 +12,45 @@ class Autopilot():
     def __init__(self,planes: AirPortPlanes,runways:RouterLandRundway,):
         self.runways=runways
         self.allplanes=planes
+        self.positions=((1000,1000))
+        self._counter=0
+        self._x=(2000,4000,6000,8000,8000,
+                 8000,4000,2000,2000,2000)
+        self._y=(8000,6000,4000,2000,2000,
+                 2000,4000,6000,8000,8000)
 
     def start(self):
         # select runway for all planes
         self.runways.start()
         # set a target cooridante for a plane
 
-
     
-
-
     def run_planes(self):
-        pass
-            # for plane in self.allplanes.planes.values():
-            #     plane:PlaneAirport
+        height=1000
+        for runway in self.runways:
+            height+=500
+            runway:AirportLandRunway
+            # check if there are planes in que without target destination
+            if len(runway.queue)>2:
                 
-            #     #  new=plane.selected_runway.coordinate.coordinates()
-            #     if  plane.selected_runway:
-            #         # if plane has destitatnion a cooridor set a target
-            #         if plane.selected_runway.
+                for plane in runway.queue[2:]:
+                    # check if new coordinate needed
+                    if not (plane.without_target() or plane.on_target()):
+                        return
+                    elif plane.without_target():
+                        self.set_new_positions()
+                        pass
 
-            #         if plane.selected_runway.plane_cooridor:
-            #             new=plane.selected_runway.corridor.start_coordinate()
+    def set_new_positions(self):
+        height=2000
+        for runway in self.runways:
+            for index, plane in enumerate(runway.queue[2:]):
+                plane:PlaneAirport
+                
 
-            #             #if plane is alraedy in cooridot set a final tartger
-            #             if plane.selected_runway.check_plane_in_corridor():
-            #                 new=plane.selected_runway.coordinate.coordinates()
-                    
-                            
-            #     plane.set_target(new)
+
+
+
 
 
 
