@@ -9,6 +9,7 @@ import random,threading
 HOST = "127.0.0.1"  # The server hostname or IP address
 PORT = 65432  # The port used by the server
 
+NUMBER_OF_PLANES=15
 
 start_coordinate=None
 BORDER_COORDINATE=(2000, 5000)
@@ -39,6 +40,8 @@ class Client():
                     # 3. Simulate move
                     self.planecommmand.handle_command(command) # movement
                     time.sleep(1)
+                    if NUMBER_OF_PLANES ==1:
+                        print(self.planecommmand._target_coordinate.coordinates())
 
                     # 4. Send answer
                     answer=self.planecommmand.answer()
@@ -83,7 +86,7 @@ def generate_border_coordinate(max_coord=10000, altitude_range=BORDER_COORDINATE
 
 if __name__ == "__main__":
     threads = []
-    for i in range(2):
+    for i in range(NUMBER_OF_PLANES):
         client = Client(generate_border_coordinate())
         t = threading.Thread(target=client.start_clinet, daemon=True)
         threads.append(t)
@@ -92,3 +95,5 @@ if __name__ == "__main__":
 
     for t in threads:
         t.join()
+
+

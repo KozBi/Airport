@@ -12,7 +12,7 @@ HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
 VERSION = "0.0.1"
 CREATION_DATE = datetime.now()
-MAX_PLANES=100
+MAX_PLANES=10
 RUNWAYS=[AirportLandRunway(2500,6000),AirportLandRunway(6000,5000)]
 
 logging.basicConfig(level=logging.DEBUG)
@@ -44,16 +44,14 @@ class Server:
 
 
     def get_new_plane_connetion(self,n_conn,n_addr):
-        # 1 check if poolconnetion is not full
-        if self.servcon.connection_possbile():
-            #2 get a plane nummber (Inster new plane in DB and get a planne number)
-            plane=self.airport.get_new_plane()   
-            if plane:
-                # 3 estahblish a new connetion in a new threat
-                self.servcon.get_new_connection(n_conn,n_addr,plane) 
-            else:
-                logging.debug("Plane cannot be added to Database")
-        else: logging.info("Maximal number of clients reached, plane cannot land")
+                #1 get a plane nummber (Inster new plane in DB and get a planne number)
+                plane=self.airport.get_new_plane()   
+                if plane:
+                    # 2 estahblish a new connetion in a new threat or reject when max number of clients is reached
+                    self.servcon.get_new_connection(n_conn,n_addr,plane) 
+                else:
+                    logging.debug("Plane cannot be added to Database")
+                    
 
     def check_connetions(self):
         while True:
@@ -67,13 +65,7 @@ if __name__ == "__main__":
 
     server=Server()
 
-    # def test():
-    #     while True:
-    #         print(server.servcon.active_planesconnection())
-    #         time.sleep(1)
-
     threading.Thread(target=server.start_server, daemon=True).start() #connetion in a different threat
-    #threading.Thread(target=test, daemon=True).start()
     server.start_airport()  # GUI must be called in main thread
     
 

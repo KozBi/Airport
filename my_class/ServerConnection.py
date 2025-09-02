@@ -11,7 +11,7 @@ from my_class.Planemodules.Planemodule import PlaneCoordinate
 
 
 class PlaneConnetion:
-    def __init__(self,conn:socket, addr,server_ref,plane: PlaneAirport):
+    def __init__(self,conn:socket, addr,server_ref,plane: PlaneAirport,reject_connetion=False):
         self.conn:socket=conn
         self.addr=addr
         self.server_ref=server_ref     
@@ -19,6 +19,7 @@ class PlaneConnetion:
         self.connection_id = self.plane.id
         self.plane.connection=self #  Plane.connection jest ustawiane w konstruktorze PlaneConnection, więc nie robię tego wcześniej w Server
         self.connetion_end = False
+        self.reject_connection=reject_connetion
         self.planecomunicationjson=PlaneComuncationJson(self.plane)
         self.connection = threading.Thread(target=self.handle_connetion,daemon=True)
         self.connection.start()
@@ -33,12 +34,19 @@ class PlaneConnetion:
             self.planecomunicationjson.handle_message(message)
             print(f"New Plane {self.plane.id}{self.plane.coordinate}")
 
-            # 2 Send target
-            cord=self.plane.get_target()
-            cord=json.dumps(cord)
-            self.conn.sendall(cord.encode('utf-8'))
+            # 2 Send target or reject coonnection 
+            if self.reject_connection:
+                self.connetion_end=True
+                reject_message={"release": False}
+                reject_message=json.dumps(reject_message)
+                self.conn.sendall(reject_message.encode('utf-8'))
+                logging.info("Client has been rejected")
+            else:
+                cord=self.plane.get_target()
+                cord=json.dumps(cord)
+                self.conn.sendall(cord.encode('utf-8'))
 
-            while True:
+            while not self.reject_connection:
                 try:
                 # 1 Receive position 
                     data = self.conn.recv(2024)
@@ -84,23 +92,22 @@ class ServerConnetions:
         self.lock = threading.Lock()
 
     def connection_possbile(self):
-        if len(self.connetions)<100:
-            return True
+        return len(self.connetions)<self.Max_planes
         
     def active_planesconnection(self):
         """Return number of aktiv connections"""
         return len(self.connetions)
 
     def get_new_connection(self,conn:socket,addr,plane: Plane):
-        """ Create a new connetion in a new Threat"""
-        if self.active_planesconnection() < self.Max_planes:
-            with self.lock:
-                new_con=PlaneConnetion(conn,addr,self,plane)
-                self.connetions.append(new_con)
-                return new_con
-                
-        else: pass # No place for the plane to do
-
+        """ estahblish a new connetion in a new threat or reject when max number of clients is reached"""
+        with self.lock:
+            if self.connection_possbile():       
+                new_con=PlaneConnetion(conn,addr,self,plane)                          
+            else: 
+                new_con=PlaneConnetion(conn,addr,self,plane,reject_connetion=True) 
+                logging.info("Plane cannot be added - Max numebers of clients")
+            self.connetions.append(new_con)
+            return new_con
     def remove_connection(self):
             for planeconnetion in self.connetions[:]: #[:] # iterate over a copy to safely modify the original list!
                 if planeconnetion.connetion_end:

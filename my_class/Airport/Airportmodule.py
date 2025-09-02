@@ -43,17 +43,20 @@ class AirportLandRunway:
 
             plane = self.queue[0]  # update current active plane
 
-        # Set target for the first plane
         if self.check_plane_in_corridor(plane):
             # If already in corridor -> direct to runway
             plane.set_target(self.coordinate.coordinates())
+            plane.start_landing()
 
             # If another plane is waiting -> direct it to corridor entry
             if len(self.queue) > 1:
                 self.queue[1].set_target(self.corridor.start_coordinate())
+                self.queue[1].start_landing()
         else:
             # If not in corridor yet -> send it to corridor entry
             plane.set_target(self.corridor.start_coordinate())
+            plane.start_landing()
+
 
     def _plane_hit_runway(self, plane: PlaneAirport) -> bool:
         """Check if a plane has reached the runway."""
@@ -69,8 +72,8 @@ class AirportLandRunway:
     def __str__(self):
         return f"AiportLandRunway Coordinates {self.coordinate.coordinates()}"
     
-    def check_plane_in_corridor(self,plane):
-        """Check inf plane cooridor is in cooridor area"""
+    def check_plane_in_corridor(self,plane)->bool:
+        """Check if plane cooridor is in cooridor area"""
         return self.corridor.contain(plane.coordinate)
     
 

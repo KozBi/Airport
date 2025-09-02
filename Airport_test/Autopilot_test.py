@@ -17,10 +17,10 @@ class Testautopilot(unittest.TestCase):
                           PlaneAirport(2,(7000,2000,0)),
                           PlaneAirport(3,(9000,3000,5000))
                          ,PlaneAirport(4,(8000,0000,0000))] #plane 4 is alredy in runway1
-        self.dummyplanes0:PlaneAirport=self.dummyplanes[0]
-        self.dummyplanes1:PlaneAirport=self.dummyplanes[1]
-        self.dummyplanes2:PlaneAirport=self.dummyplanes[2]
-        self.dummyplanes3:PlaneAirport=self.dummyplanes[3]
+        self.dummyplane0:PlaneAirport=self.dummyplanes[0]
+        self.dummyplane1:PlaneAirport=self.dummyplanes[1]
+        self.dummyplane2:PlaneAirport=self.dummyplanes[2]
+        self.dummyplane3:PlaneAirport=self.dummyplanes[3]
         self.runway1=AirportLandRunway(2000,3000)
         self.planes=AirPortPlanes()
         self.router=RouterLandRundway(self.planes,[self.runway1])
@@ -44,7 +44,7 @@ class Testautopilot(unittest.TestCase):
         self.autopilot.start()
 
         #check if plane has finial coordinate
-        result1=self.dummyplanes0.target_coordinate.coordinates()
+        result1=self.dummyplane0.target_coordinate.coordinates()
         tup=(2000,3000,0)
         self.assertEqual(result1,tup)
         #check if plane is in corridor
@@ -57,12 +57,18 @@ class Testautopilot(unittest.TestCase):
 
         #check if plane 2 is selected 
         result1=self.runway1.next_plane_cooridor
-        self.assertEqual(result1,self.dummyplanes1)
+        self.assertEqual(result1,self.dummyplane1)
 
         # #check if plane 2 has right coordinate
-        result2=self.dummyplanes1.target_coordinate.coordinates()
+        result2=self.dummyplane1.target_coordinate.coordinates()
         tup=self.runway1.corridor.start_coordinate()
         self.assertEqual(result2,tup)
+
+    def testautopilot(self):
+        self.autopilot.set_new_positions()
+        print(self.dummyplane2.target_coordinate)
+        print(self.dummyplane3.target_coordinate)
+
 
     
 

@@ -33,14 +33,28 @@ class PlaneAirport(Plane):
         
         self.selected_runway=None #class runway that already selected
         self.target_coordinate=PlaneCoordinate(coordinate)
+        self.landing=False
+        self.holding_index=0
 
-    def set_target(self,coordintate:tuple):
+    def set_target(self,coordintate:tuple,index=None):
         """Set target for a plane"""
         self.target_coordinate.set(coordintate)
+        if index is not None:
+            self.holding_index=index
+
+
+    def update_holding_target(self, points):
+        """Call when plane reached current target"""
+        self.holding_index = (self.holding_index + 1) % len(points)
+        self.target = points[self.holding_index]
+
 
     def get_target(self):
         target=self.target_coordinate.coordinates()
         return {"target_coordinate": (target)}
+    
+    def start_landing(self):
+        self.landing=True
 
     def landed(self):
         """Check if plane hit the finial destination"""
@@ -55,7 +69,11 @@ class PlaneAirport(Plane):
     
 
     def on_target(self):
-        return self.target_coordinate.coordinates()==self.coordinate.coordinates()
+        if  (self.target_coordinate.width==self.coordinate.width and
+            self.target_coordinate.length==self.coordinate.length and
+            self.target_coordinate.height==self.coordinate.height):
+        #    logging.debug("Plane hit the target")
+            return True
 
         
 class PlaneClinet(Plane):

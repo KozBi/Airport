@@ -37,9 +37,10 @@ class AirportArea(Area):
 class RunwayArea(Area):
     def __init__(self,runway,width=-300,length=-2500):
         height=600
-        runway=runway.coordinate
+        runway=(runway.coordinate)
         super().__init__(runway,width,length,height)   
-
+        
     def start_coordinate(self) -> tuple: 
         """Return tuple (width,lenght,height)"""
         return (self.e_x,self.e_y,self.e_z)
+    

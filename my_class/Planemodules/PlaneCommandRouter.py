@@ -27,6 +27,11 @@ class PlaneCommandRouter():
         if "release_disc" in command and command["release_disc"]:
             self.dissconect = True
 
+        if "release" in command and command["release"]==False:
+            print("No release to connect to Airport")
+            self.dissconect = True
+        
+
     def answer(self):
         # wysylac caly czas koordynaty.. Chyba ze cos innego wtedy if i podmienic komende.
         sendjson={

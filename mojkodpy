@@ -1,15 +1,3 @@
-sendjson={
-        "type": "position_update",
-        "position": [1,2,3]
-        }
-
-sendjson1={
-        "type": "position_update",
-        "position": [1,2,3]
-        }
-
-res={}
-
-#jak dodac 2 te dict
-
-print(res)
+for h_r,runway in enumerate(("a","b","C","d","E")):
+    print(h_r)
+    print(runway)
