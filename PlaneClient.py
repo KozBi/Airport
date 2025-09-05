@@ -36,8 +36,8 @@ class Client():
             command=json.loads(data.decode('utf-8')) 
 
             while True:               
-                    
-                    # 3. Simulate move
+                try:
+                    # 3. Simulate move or reject connection
                     self.planecommmand.handle_command(command) # movement
                     time.sleep(1)
                     if NUMBER_OF_PLANES ==1:
@@ -50,24 +50,25 @@ class Client():
                     # 5. Fuel check
                     if self.plane.fuel_check():
                         # to do - log in database - crash
-                        self.planecommmand.dissconect
+                        self.planecommmand.dissconect=True
 
                     # 5. Check for command
                     s.settimeout(0.5)
-                    try:
-                        new_data = s.recv(2048)
-                        if new_data:
-                            command  = json.loads(new_data.decode('utf-8')) 
-                            self.planecommmand.handle_command(command)
-                    except socket.timeout:
-                        logging.info("No data from Server")
-                        continue
+                    
+                    new_data = s.recv(2048)
+                    if new_data:
+                        command  = json.loads(new_data.decode('utf-8')) 
+                        self.planecommmand.handle_command(command)
                     # If plane already land, shut down the connection
 
                     if self.planecommmand.dissconect:
                         print("Plane hit the target, dissconnection")
                         break
-                
+                # connection lost
+                except Exception as e:
+                        logging.info("No data from Server")
+                        break
+                        
 
 def generate_border_coordinate(max_coord=10000, altitude_range=BORDER_COORDINATE):
     # Generate x or y

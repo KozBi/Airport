@@ -24,10 +24,10 @@ class Airport():
         
         self.airportlogbook=AirportLogbook() #create a log 
     
-    def get_new_plane(self):
+    def get_new_plane(self)-> int:
         """Return: Plane object"""
         # 1 create log in database, receive plane id 
-        plane_id=self.airportlogbook.connection_established() 
+        plane_id=self.airportlogbook.insert_new_connetion()
         
         # 2 Create Plane object with ID from Database
         if plane_id is not None:

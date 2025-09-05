@@ -37,7 +37,9 @@ class PlaneConnetion:
             # 2 Send target or reject coonnection 
             if self.reject_connection:
                 self.connetion_end=True
-                reject_message={"release": False}
+                reject_message={"release_disc": True,
+                "disc_reason": "Connetion rejected - No empty slot for a new plane"}
+
                 reject_message=json.dumps(reject_message)
                 self.conn.sendall(reject_message.encode('utf-8'))
                 logging.info("Client has been rejected")
@@ -75,6 +77,7 @@ class PlaneConnetion:
                     self.connetion_end = True
                     return False
                 except Exception as e:
+                    print(e)
                     self.connetion_end = True
                     return False    
 

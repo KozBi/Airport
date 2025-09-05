@@ -36,7 +36,7 @@ class Testautopilot(unittest.TestCase):
     def test_lengh_of_list(self):
         #all planes are added to ranway
         self.autopilot.start()
-        result1=self.runway1.planes_to_landrunway
+        result1=self.runway1.queue
         self.assertEqual(self.dummyplanes,result1)
 
     def test_move_to_coordinor(self):
@@ -56,7 +56,7 @@ class Testautopilot(unittest.TestCase):
         self.autopilot.start()
 
         #check if plane 2 is selected 
-        result1=self.runway1.next_plane_cooridor
+        result1=self.runway1.queue[1]
         self.assertEqual(result1,self.dummyplane1)
 
         # #check if plane 2 has right coordinate

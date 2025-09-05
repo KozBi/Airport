@@ -1,7 +1,8 @@
 import psycopg2
 from contextlib import contextmanager
+import json
 
-
+from my_class.Planemodules.Planemodule import PlaneAirport
 
 class DataBaseConnection():
     def __init__(self, host='localhost', database='airport', user='postgres', password='admin'):
@@ -37,7 +38,8 @@ class DataBaseConnection():
                 CREATE TABLE IF NOT EXISTS Planes (
                     id BIGSERIAL PRIMARY KEY,
                     connection_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                    has_landed Bool NOT NULL DEFAULT FALSE
+                    has_landed Bool NOT NULL DEFAULT FALSE,
+                    start_coordinate JSONB DEFAULT '{}' NOT NULL
                 );
             """)
 
@@ -59,7 +61,7 @@ class AirportLogbook():
         self.password=password
         self.databaseconnection=DataBaseConnection(host=self.host, database=self.database, user=self.user, password=self.password)
     
-    def connection_established(self):
+    def insert_new_connetion(self):
         """ Try to write connetion in DB, 
         if succesfull return plane id"""
         try:
@@ -67,6 +69,17 @@ class AirportLogbook():
                 curr.execute("INSERT INTO Planes DEFAULT VALUES RETURNING id")
                 plane_id = curr.fetchone()[0]
                 return (plane_id)
+        except psycopg2.Error as e:
+                print("Database error:", e)
+                return None
+        
+    def update_start_coordinate(self,plane:PlaneAirport)-> None:
+        """Update start coordinate for plaene"""
+        plane_id=plane.id
+        coordinate=json.dumps(plane.coordinate.coordinates())
+        try:
+            with self.databaseconnection.get_cursor() as curr:
+                curr.execute("UPDATE Planes SET start_coordinate=%s WHERE ID=%s;", (coordinate,plane_id))
         except psycopg2.Error as e:
                 print("Database error:", e)
                 return None

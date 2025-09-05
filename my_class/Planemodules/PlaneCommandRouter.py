@@ -25,11 +25,10 @@ class PlaneCommandRouter():
             self.planecommand.move_toward(self._target_coordinate)
         
         if "release_disc" in command and command["release_disc"]:
+            if "disc_reason" in command:
+                print (command["disc_reason"])
             self.dissconect = True
 
-        if "release" in command and command["release"]==False:
-            print("No release to connect to Airport")
-            self.dissconect = True
         
 
     def answer(self):
