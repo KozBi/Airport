@@ -8,18 +8,19 @@ import random
 from my_class.Planemodules.Planemodule import PlaneAirport
 from my_class.Airport.Airport import Airport
 from my_class.Planemodules.Planemodule import PlaneCoordinate
-
+from my_class.DataBase.DataBaseLog import AirportLogbook
 
 class PlaneConnetion:
-    def __init__(self,conn:socket, addr,server_ref,plane: PlaneAirport,reject_connetion=False):
+    def __init__(self,conn:socket, addr,server_ref,plane: PlaneAirport,airportlogbook:AirportLogbook,reject_connetion=False):
         self.conn:socket=conn
         self.addr=addr
         self.server_ref=server_ref     
-        self.plane = plane
+        self.plane: PlaneAirport = plane
         self.connection_id = self.plane.id
         self.plane.connection=self #  Plane.connection jest ustawiane w konstruktorze PlaneConnection, więc nie robię tego wcześniej w Server
         self.connetion_end = False
         self.reject_connection=reject_connetion
+        self.airportlogbook=airportlogbook
         self.planecomunicationjson=PlaneComuncationJson(self.plane)
         self.connection = threading.Thread(target=self.handle_connetion,daemon=True)
         self.connection.start()
@@ -33,6 +34,7 @@ class PlaneConnetion:
             message =  json.loads(data.decode('utf-8')) # receive from client a task
             self.planecomunicationjson.handle_message(message)
             print(f"New Plane {self.plane.id}{self.plane.coordinate}")
+            self.airportlogbook.update_start_coordinate(self.plane)
 
             # 2 Send target or reject coonnection 
             if self.reject_connection:
@@ -63,6 +65,8 @@ class PlaneConnetion:
                     # 2a If plane landed - release shut down the connection
                     if self.plane.landed():
                           message={"release_disc": True}  
+                          # save in DB iformation thah plane has succesfully landed
+                          self.airportlogbook.update_landing_info(self.plane)
 
                     message=json.dumps(message)
                     self.conn.sendall(message.encode('utf-8')) 
@@ -105,9 +109,9 @@ class ServerConnetions:
         """ estahblish a new connetion in a new threat or reject when max number of clients is reached"""
         with self.lock:
             if self.connection_possbile():       
-                new_con=PlaneConnetion(conn,addr,self,plane)                          
+                new_con=PlaneConnetion(conn,addr,self,plane,self.airport_ref.airportlogbook)                          
             else: 
-                new_con=PlaneConnetion(conn,addr,self,plane,reject_connetion=True) 
+                new_con=PlaneConnetion(conn,addr,self,plane,self.airport_ref.airportlogbook,reject_connetion=True) 
                 logging.info("Plane cannot be added - Max numebers of clients")
             self.connetions.append(new_con)
             return new_con

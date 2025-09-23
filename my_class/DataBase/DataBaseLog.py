@@ -83,6 +83,16 @@ class AirportLogbook():
         except psycopg2.Error as e:
                 print("Database error:", e)
                 return None
+        
+    def update_landing_info(self,plane:PlaneAirport)-> None:
+        """Update landing information"""
+        plane_id=plane.id
+        try:
+            with self.databaseconnection.get_cursor() as curr:
+                curr.execute("UPDATE Planes SET has_landed=%s WHERE ID=%s;", (True,plane_id))
+        except psycopg2.Error as e:
+                print("Database error:", e)
+                return None
 
 
     

@@ -9,7 +9,7 @@ import random,threading
 HOST = "127.0.0.1"  # The server hostname or IP address
 PORT = 65432  # The port used by the server
 
-NUMBER_OF_PLANES=15
+NUMBER_OF_PLANES=1
 
 start_coordinate=None
 BORDER_COORDINATE=(2000, 5000)
@@ -41,7 +41,8 @@ class Client():
                     self.planecommmand.handle_command(command) # movement
                     time.sleep(1)
                     if NUMBER_OF_PLANES ==1:
-                        print(self.planecommmand._target_coordinate.coordinates())
+                        print(f"ACTUAL COORDINATE{self.plane.coordinate.coordinates()}")
+                        print(F"TARGET {self.planecommmand._target_coordinate.coordinates()}")
 
                     # 4. Send answer
                     answer=self.planecommmand.answer()
