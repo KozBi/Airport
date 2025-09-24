@@ -7,12 +7,13 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from my_class.Planemodules.Planemodule import PlaneAirport
 from my_class.Airport.Airportmodule import AirportLandRunway, AirPortPlanes,RouterLandRundway
-
+from my_class.DataBase.DataBaseLog import AirportLogbook
 
 class Autopilot():
-    def __init__(self,planes: AirPortPlanes,runways:RouterLandRundway,):
+    def __init__(self,planes: AirPortPlanes,runways:RouterLandRundway,airportlogbook:AirportLogbook):
         self.runways=runways
         self.allplanes=planes
+        self.airportlogbook=airportlogbook
         self.positions=((1000,1000))
         self._counter=0
         self._x=(2000,4000,6000,8000,8000,
@@ -24,6 +25,7 @@ class Autopilot():
         # select runway for all planes
         self.runways.start()
         self.run_planes()
+        self.airportlogbook.check_collision()
         # set a target cooridante for a plane
 
     
@@ -43,30 +45,6 @@ class Autopilot():
                     else:# plane.without_target() or plane.on_target():
                         continue
                         
-                    
-    # def set_new_positions(self):
-    #     height=2000
-    #     for h_r,runway in enumerate(self.runways.runways):
-    #         height=height + 500*h_r
-    #    #     next_holidng_index=0
-    #         for h_p, plane in enumerate(runway.queue,):
-    #             plane:PlaneAirport
-    #             if plane.landing:
-    #                 continue
-                
-    #             #if index reszta z dzielenia do zwiekszenia hight.
-    #             if len(self._x) <= plane.holding_index:
-    #                 plane.holding_index=0
-                
-    #        #     plane.holding_index=next_holidng_index
-
-    #             x=self._x[plane.holding_index]
-    #             y=self._y[plane.holding_index]
-    #             if h_p % len(self._x)==0:
-    #                 height=height + 1000
-    #             z= height
-    #             plane.set_target((x,y,z))
-    #             plane.holding_index+=1
 
     def set_new_positions(self):
         """Assign holding pattern coordinates for planes beyond first 2 in queue."""

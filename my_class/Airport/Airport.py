@@ -18,11 +18,12 @@ class Airport():
         self.airportarea=AirportArea() 
         self.airportplanes=AirPortPlanes()
         self.runways=runways
+        self.airportlogbook=AirportLogbook(self.airportplanes) #create a log in DB
         self.airportlandrunway=RouterLandRundway(self.airportplanes,self.runways)
-        self.airportautopilot=Autopilot(self.airportplanes,self.airportlandrunway)
+        self.airportautopilot=Autopilot(self.airportplanes,self.airportlandrunway,self.airportlogbook)
         self.airportgui=AirPortGUI(self.airportplanes,self.airportautopilot)
         
-        self.airportlogbook=AirportLogbook() #create a log 
+        
     
     def get_new_plane(self)-> int:
         """Return: Plane object"""

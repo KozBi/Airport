@@ -3,6 +3,7 @@ from contextlib import contextmanager
 import json
 
 from my_class.Planemodules.Planemodule import PlaneAirport
+from my_class.Airport.Airportmodule import AirPortPlanes
 
 class DataBaseConnection():
     def __init__(self, host='localhost', database='airport', user='postgres', password='admin'):
@@ -44,23 +45,33 @@ class DataBaseConnection():
             """)
 
             curr.execute("""
-                CREATE TABLE IF NOT EXISTS Colision (
+                CREATE TABLE IF NOT EXISTS Collision (
                     id BIGSERIAL PRIMARY KEY,
-                    Plane1 INTEGER REFERENCES Planes(id),
-                    Plane2 INTEGER REFERENCES Planes(id),
+                    Plane INTEGER REFERENCES Planes(id),
+                    reason VARCHAR(50),
                     timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
                 );
             """)
 
+class AirportLogCollision():
+    def __init__(self,planes:AirPortPlanes):
+        self.planes:AirPortPlanes=planes
+
+    
+    def check_collision(self):
+        print("Sprawdzam kolizje cały czas: :)")
+        pass
+
 
 class AirportLogbook():
-    def __init__(self, host='localhost', database='airport', user='postgres', password='admin'):
+    def __init__(self,ref_planes:AirPortPlanes, host='localhost', database='airport', user='postgres', password='admin'):
         self.host=host
         self.database=database
         self.user=user
         self.password=password
         self.databaseconnection=DataBaseConnection(host=self.host, database=self.database, user=self.user, password=self.password)
-    
+        self.airportlogcollision=AirportLogCollision(ref_planes)
+
     def insert_new_connetion(self):
         """ Try to write connetion in DB, 
         if succesfull return plane id"""
@@ -93,6 +104,12 @@ class AirportLogbook():
         except psycopg2.Error as e:
                 print("Database error:", e)
                 return None
+        
+    def check_collision(self):
+         self.airportlogcollision.check_collision()
+         
+        
+
 
 
     
