@@ -1,5 +1,5 @@
 
-import json
+import json,math
 import numpy as np
 
 
@@ -60,3 +60,12 @@ class PlaneCoordinate(Coordinate):
         self.width = coordintate[0]
         self.length = coordintate[1]
         self.height = coordintate[2]
+
+    def distance_to(self, other: "Coordinate") -> float:
+        """Count distance to the other object"""
+        return math.sqrt(
+            (self.width - other.width) ** 2 +
+            (self.length - other.length) ** 2 +
+            (self.height - other.height) ** 2
+        )
+

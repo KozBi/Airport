@@ -1,6 +1,7 @@
 import psycopg2
 from contextlib import contextmanager
 import json
+from itertools import combinations
 
 from my_class.Planemodules.Planemodule import PlaneAirport
 from my_class.Airport.Airportmodule import AirPortPlanes
@@ -59,9 +60,16 @@ class AirportLogCollision():
 
     
     def check_collision(self):
-        print("Sprawdzam kolizje cały czas: :)")
-        pass
-
+        result=False
+        for plane, nextplane in combinations(self.planes,2):
+            plane:PlaneAirport
+            nextplane:PlaneAirport
+            distance=plane.coordinate.distance_to(nextplane.coordinate)
+            print(distance)
+            if distance <=20:
+                result=True
+        return result
+         
 
 class AirportLogbook():
     def __init__(self,ref_planes:AirPortPlanes, host='localhost', database='airport', user='postgres', password='admin'):
@@ -106,7 +114,7 @@ class AirportLogbook():
                 return None
         
     def check_collision(self):
-         self.airportlogcollision.check_collision()
+        return self.airportlogcollision.check_collision()
          
         
 

@@ -2,7 +2,7 @@ import unittest, sys, os
 import psycopg2
 
 from my_class.Planemodules.Planemodule import PlaneAirport
-from my_class.DataBase.DataBaseLog import AirportLogbook
+from my_class.DataBase.DataBaseLog import AirportLogbook, AirportLogCollision
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -21,15 +21,19 @@ class TestDataBase(unittest.TestCase):
         
     
     def setUp(self):   
-        self.database=AirportLogbook(database="test_airport")
+        
         self.dummyplanes=[PlaneAirport(1,(10000,2000,0)),
                     PlaneAirport(2,(1000,20000,0)),
                     PlaneAirport(3,(9000,3000,5000))
-                    ,PlaneAirport(4,(8000,0000,0000))] #plane 4 is alredy in runway1
+                    ,PlaneAirport(4,(8000,0000,0000)) #plane 4 is alredy in runway1
+                    ,PlaneAirport(5,(9000,3001,5001)) #check collision
+                    ,PlaneAirport(6,(9000,3001,5003))] #check collision
         self.dummyplanes0=self.dummyplanes[0]
         self.dummyplanes1=self.dummyplanes[1]
         self.dummyplanes2=self.dummyplanes[2]
         self.dummyplanes3=self.dummyplanes[3]
+        self.dummyplanes4=self.dummyplanes[4]
+        self.database=AirportLogbook(self.dummyplanes,database="test_airport")
         self.reset_database()
          
     @classmethod
@@ -54,5 +58,10 @@ class TestDataBase(unittest.TestCase):
         result=self.curs.fetchone()
         # check if updated coordinates are correct
         self.assertEqual(self.dummyplanes0.coordinate.get_list_coordinates(),result[0])
+
+    def test_check_colission(self):
+        resutl=self.database.check_collision()
+        print(resutl)
+        self.assertTrue(resutl)
                           
         

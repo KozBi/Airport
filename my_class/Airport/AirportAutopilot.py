@@ -10,10 +10,10 @@ from my_class.Airport.Airportmodule import AirportLandRunway, AirPortPlanes,Rout
 from my_class.DataBase.DataBaseLog import AirportLogbook
 
 class Autopilot():
-    def __init__(self,planes: AirPortPlanes,runways:RouterLandRundway,airportlogbook:AirportLogbook):
+    def __init__(self,planes: AirPortPlanes,runways:RouterLandRundway,airportlogbook=None):
         self.runways=runways
         self.allplanes=planes
-        self.airportlogbook=airportlogbook
+        self.airportlogbook=airportlogbook #
         self.positions=((1000,1000))
         self._counter=0
         self._x=(2000,4000,6000,8000,8000,
@@ -25,7 +25,9 @@ class Autopilot():
         # select runway for all planes
         self.runways.start()
         self.run_planes()
-        self.airportlogbook.check_collision()
+        # if airportlogbook not provieded skipp method - it's optional
+        if self.airportlogbook:
+            self.airportlogbook.check_collision()
         # set a target cooridante for a plane
 
     
