@@ -2,6 +2,7 @@ import psycopg2
 from contextlib import contextmanager
 import json
 from itertools import combinations
+import logging
 
 from my_class.Planemodules.Planemodule import PlaneAirport
 from my_class.Airport.Airportmodule import AirPortPlanes
@@ -55,24 +56,34 @@ class DataBaseConnection():
             """)
 
 class AirportLogCollision():
-    def __init__(self,planes:AirPortPlanes):
-        self.planes:AirPortPlanes=planes
+    def __init__(self,planes):
+        self.planes=planes
 
     
     def check_collision(self):
-        result=False
-        for plane, nextplane in combinations(self.planes,2):
-            plane:PlaneAirport
-            nextplane:PlaneAirport
-            distance=plane.coordinate.distance_to(nextplane.coordinate)
-            print(distance)
-            if distance <=20:
-                result=True
-        return result
+        """return list of crashed planes:
+        crashed plane id,
+        reson,
+        the plane he collided with
+        """
+        crashed_planes=[]
+        for plane in self.planes:
+            if plane.empy_tank:
+                crashed_planes.append((plane.id,"No fuel"))
+
+        if len(self.planes)>=2:
+            for plane, nextplane in combinations(self.planes,2):
+                plane:PlaneAirport
+                nextplane:PlaneAirport
+                distance=plane.coordinate.distance_to(nextplane.coordinate)
+                if distance <=20:
+                    crashed_planes.append((plane.id,"collision between planes",nextplane.id))
+
+        return crashed_planes
          
 
 class AirportLogbook():
-    def __init__(self,ref_planes:AirPortPlanes, host='localhost', database='airport', user='postgres', password='admin'):
+    def __init__(self,ref_planes, host='localhost', database='airport', user='postgres', password='admin'):
         self.host=host
         self.database=database
         self.user=user
@@ -113,9 +124,18 @@ class AirportLogbook():
                 print("Database error:", e)
                 return None
         
-    def check_collision(self):
-        return self.airportlogcollision.check_collision()
-         
+    def log_collision(self):
+        crahsed_planes=self.airportlogcollision.check_collision()
+
+        for values in crahsed_planes:
+            try:
+                with self.databaseconnection.get_cursor() as curr:
+                    print(values[0],values[1])
+                    curr.execute("Insert INTO Collision (Plane ,reason) VALUES(%s,%s);", (values[0],values[1]))
+                    logging.warning("Collision has been occured")
+            except psycopg2.Error as e:
+                    print("Database error:", e)
+                    return None
         
 
 

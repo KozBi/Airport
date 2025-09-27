@@ -14,6 +14,7 @@ class Plane():
         self.coordinate=PlaneCoordinate(coordinate) #class coordintae
         self.connection=None
         self.fuel=None
+        self.empy_tank=False
 
 
     def __str__(self):
@@ -35,6 +36,7 @@ class PlaneAirport(Plane):
         self.target_coordinate=PlaneCoordinate(coordinate)
         self.landing=False
         self.holding_index=0
+        
 
     def set_target(self,coordintate:tuple,index=None):
         """Set target for a plane"""
@@ -56,8 +58,9 @@ class PlaneAirport(Plane):
     def start_landing(self):
         self.landing=True
 
-    def landed(self):
-        """Check if plane hit the finial destination"""
+    def landed(self)->bool:
+        """Check if plane hit the finial destination
+        Retrun True if plane hit the finial destination"""
         aktual=self.coordinate.coordinates() 
         final_destination=self.selected_runway.coordinate.coordinates()
 

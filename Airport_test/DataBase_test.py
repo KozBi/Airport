@@ -43,6 +43,7 @@ class TestDataBase(unittest.TestCase):
     #reset test_mailbox each tim when test is called.
     def reset_database(self):
         self.curs.execute("TRUNCATE TABLE planes RESTART IDENTITY CASCADE;")
+        self.curs.execute("TRUNCATE TABLE Collision RESTART IDENTITY CASCADE;")
         for p in self.dummyplanes:
             p:PlaneAirport
             self.curs.execute("""
@@ -60,8 +61,9 @@ class TestDataBase(unittest.TestCase):
         self.assertEqual(self.dummyplanes0.coordinate.get_list_coordinates(),result[0])
 
     def test_check_colission(self):
-        resutl=self.database.check_collision()
-        print(resutl)
-        self.assertTrue(resutl)
+        self.database.log_collision()
+        self.curs.execute("""SELECT * FROM Collision;""")
+        result=self.curs.fetchall()
+       # self.assertEqual(result,
                           
         

@@ -77,9 +77,6 @@ class AirportLandRunway:
         return self.corridor.contain(plane.coordinate)
     
 
-
-
-
 class AirPortPlanes():
     def __init__(self):
         """Contain all planes in a dict"""
@@ -87,13 +84,19 @@ class AirPortPlanes():
 
     def __str__(self):
         return str(self.planes)
+    
+    def __len__(self):
+        return len(self.planes)
+    
+    def __iter__(self):
+        return iter(self.planes.values())
 
     def add_plane(self, plane:PlaneAirport):
         """Add a plane to the list"""
         if type(plane)==PlaneAirport:
             self.planes[plane.id]=plane
         else:
-            logging.debug("Wrong class as asrgument")
+            logging.debug("Wrong class as argument")
 
     def remove_plane(self, plane:PlaneAirport):
         """Remove a plane from the list"""

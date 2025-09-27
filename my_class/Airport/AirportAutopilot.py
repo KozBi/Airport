@@ -13,7 +13,7 @@ class Autopilot():
     def __init__(self,planes: AirPortPlanes,runways:RouterLandRundway,airportlogbook=None):
         self.runways=runways
         self.allplanes=planes
-        self.airportlogbook=airportlogbook #
+        self.airportlogbook:AirportLogbook=airportlogbook #
         self.positions=((1000,1000))
         self._counter=0
         self._x=(2000,4000,6000,8000,8000,
@@ -27,7 +27,7 @@ class Autopilot():
         self.run_planes()
         # if airportlogbook not provieded skipp method - it's optional
         if self.airportlogbook:
-            self.airportlogbook.check_collision()
+            self.airportlogbook.log_collision()
         # set a target cooridante for a plane
 
     

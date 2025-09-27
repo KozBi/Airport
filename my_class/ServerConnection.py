@@ -4,7 +4,7 @@ from my_class.Planemodules.Planemodule import Plane
 import threading
 import json
 import logging
-import random
+import time
 from my_class.Planemodules.Planemodule import PlaneAirport
 from my_class.Airport.Airport import Airport
 from my_class.Planemodules.Planemodule import PlaneCoordinate
@@ -138,6 +138,7 @@ class PlaneComuncationJson():
                 self.plane.fuel=msg["fuel"]
 
             if msg["type"]=="colission":
+                self.plane.empy_tank=True
                 self.shut_down=True
                 logging.info(f'Colission - reason: {msg["reason"]}')
 
