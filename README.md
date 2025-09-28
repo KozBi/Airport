@@ -10,10 +10,10 @@ Designed collision detection, fuel management, and air corridor navigation logic
 Stored connection status, collisions, and landing events in an SQL database.
 
 
-Youtube video: https://www.youtube.com/watch?v=hOOoHpLDKrs
+Youtube video: https://www.youtube.com/watch?v=yZaTmlQexnk
 
 
-<img width="1332" height="822" alt="image" src="https://github.com/user-attachments/assets/a995a551-d66c-4d20-9610-c499fcbf78eb" />
+<img width="1423" height="1013" alt="image" src="https://github.com/user-attachments/assets/3762ff28-cdcc-4bcc-b272-3734d5e5eea0" />
 
 <img width="710" height="801" alt="planes_DB" src="https://github.com/user-attachments/assets/7aabb339-e625-4f71-8ec1-681607021364" />
 <img width="858" height="747" alt="Collision_DB" src="https://github.com/user-attachments/assets/4e207834-6dbd-4fbf-b26f-aed4fa61777f" />
