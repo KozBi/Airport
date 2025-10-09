@@ -4,6 +4,8 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from matplotlib.animation import FuncAnimation
 from my_class.Airport.Airportmodule import AirPortPlanes
 from my_class.Airport.Airport import Autopilot, AirportLandRunway
+from my_class.api.server import start_api
+import uvicorn
 
 class AirPortGUI:
     def __init__(self,planes=AirPortPlanes,autopilot=Autopilot):

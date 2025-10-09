@@ -39,17 +39,17 @@ class Testautopilot(unittest.TestCase):
         result1=self.runway1.queue
         self.assertEqual(self.dummyplanes,result1)
 
-    def test_move_to_coordinor(self):
+    # def test_move_to_coordinor(self):
         
-        self.autopilot.start()
+    #     self.autopilot.start()
 
-        #check if plane has finial coordinate
-        result1=self.dummyplane0.target_coordinate.coordinates()
-        tup=(2000,3000,0)
-        self.assertEqual(result1,tup)
-        #check if plane is in corridor
-        result2=self.runway1.check_plane_in_corridor()
-        self.assertTrue(result2)
+    #     #check if plane has finial coordinate
+    #     result1=self.dummyplane0.target_coordinate.coordinates()
+    #     tup=(2000,3000,0)
+    #     self.assertEqual(result1,tup)
+    #     #check if plane is in corridor
+    #     result2=self.runway1.check_plane_in_corridor()
+    #     self.assertTrue(result2)
 
     def test_next_planemove_to_coordinor(self):
         

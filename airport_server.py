@@ -3,10 +3,13 @@ import threading
 from datetime import datetime
 import logging
 import time
+import uvicorn
 
+from my_class.api.server import start_api
 from my_class.ServerConnection import ServerConnetions
 from my_class.Airport.Airport import Airport
 from my_class.Airport.Airportmodule import AirportLandRunway
+
 
 HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
@@ -23,11 +26,14 @@ class Server:
     def __init__(self):
 
         self.runways=RUNWAYS
-        self.airport=Airport(self.runways) #whole logic
+        self.airport=Airport(self.runways) #whole logic with GUI
         self.servcon=ServerConnetions(self.airport,MAX_PLANES) # handle connections to planes
    #     self.response=None
         self.connection_checker = threading.Thread(target=self.check_connetions,daemon=True)
         self.connection_checker.start()
+
+        self.Restapi = threading.Thread(target=self.run_api,daemon=True)
+        self.Restapi.start()
 
 
     def start_server(self):
@@ -57,6 +63,10 @@ class Server:
         while True:
             time.sleep(5)  # check every 5 second
             self.servcon.remove_connection()
+
+    def run_api(self):
+        app=start_api(self.airport.airportplanes)
+        uvicorn.run(app, host="127.0.0.1", port=8000)
 
     def start_airport(self):
         self.airport.start()
