@@ -13,7 +13,7 @@ from my_class.Airport.Airportmodule import AirportLandRunway
 
 HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
-VERSION = "0.0.1"
+VERSION = "1.0.0"
 CREATION_DATE = datetime.now()
 MAX_PLANES=100
 RUNWAYS=[AirportLandRunway(2500,6000),AirportLandRunway(6000,5000)]
@@ -28,7 +28,6 @@ class Server:
         self.runways=RUNWAYS
         self.airport=Airport(self.runways) #whole logic with GUI
         self.servcon=ServerConnetions(self.airport,MAX_PLANES) # handle connections to planes
-   #     self.response=None
         self.connection_checker = threading.Thread(target=self.check_connetions,daemon=True)
         self.connection_checker.start()
 
@@ -50,7 +49,7 @@ class Server:
 
 
     def get_new_plane_connetion(self,n_conn,n_addr):
-                #1 get a plane nummber (Inster new plane in DB and get a planne number)
+                #1 get a plane number (Insert a new plane in DB and get a planne number)
                 plane=self.airport.get_new_plane()   
                 if plane:
                     # 2 estahblish a new connetion in a new threat or reject when max number of clients is reached
@@ -61,11 +60,11 @@ class Server:
 
     def check_connetions(self):
         while True:
-            time.sleep(5)  # check every 5 second
+            time.sleep(5)  # check every 5 seconds
             self.servcon.remove_connection()
 
     def run_api(self):
-        app=start_api(self.airport.airportplanes)
+        app=start_api(self.airport.airportplanes,self.airport.airportlogbook)
         uvicorn.run(app, host="127.0.0.1", port=8000)
 
     def start_airport(self):

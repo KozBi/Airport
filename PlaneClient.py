@@ -22,7 +22,7 @@ class Client():
         self.planecommmand=PlaneCommandRouter(self.plane)
 
         
-    def start_clinet(self):
+    def start_client(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((HOST, PORT))
             print("Connected to the airport.")
@@ -90,7 +90,7 @@ if __name__ == "__main__":
     threads = []
     for i in range(NUMBER_OF_PLANES):
         client = Client(generate_border_coordinate())
-        t = threading.Thread(target=client.start_clinet, daemon=True)
+        t = threading.Thread(target=client.start_client, daemon=True)
         threads.append(t)
         t.start()
         time.sleep(0.2) 

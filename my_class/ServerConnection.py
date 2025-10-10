@@ -115,6 +115,7 @@ class ServerConnetions:
                 logging.info("Plane cannot be added - Max numebers of clients")
             self.connetions.append(new_con)
             return new_con
+        
     def remove_connection(self):
             for planeconnetion in self.connetions[:]: #[:] # iterate over a copy to safely modify the original list!
                 if planeconnetion.connetion_end:

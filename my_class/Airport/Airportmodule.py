@@ -83,7 +83,10 @@ class AirPortPlanes():
         self.planes={}
 
     def __str__(self):
-        return str(self.planes)
+        return str(self.planes.values())
+ 
+    def __repr__(self):
+        return str(self.planes.values())
     
     def __len__(self):
         return len(self.planes)

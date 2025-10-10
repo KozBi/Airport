@@ -32,3 +32,6 @@ class TestAirPortPlanes(unittest.TestCase):
         self.assertEqual(len(self.planes.planes),1)
         self.planes.remove_plane(self.dummyplanes[0])
         self.assertEqual(len(self.planes.planes),0)
+
+    def test_str_AirportPlanes(self):
+        print(self.planes)
