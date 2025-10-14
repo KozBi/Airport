@@ -2,6 +2,7 @@ import sys
 import os
 import logging
 import numpy as np
+from typing import Dict
 
 from my_class import Planemodules
 from my_class.Planemodules.Planemodule import PlaneAirport
@@ -80,13 +81,13 @@ class AirportLandRunway:
 class AirPortPlanes():
     def __init__(self):
         """Contain all planes in a dict"""
-        self.planes={}
+        self.planes: Dict[int, PlaneAirport] = {}
 
     def __str__(self):
         return str(self.planes.values())
  
-    def __repr__(self):
-        return str(self.planes.values())
+   # def __repr__(self):
+    #    return str(self.planes.values())
     
     def __len__(self):
         return len(self.planes)

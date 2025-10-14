@@ -19,8 +19,8 @@ class Plane():
     def __str__(self):
         return str([self.id , self.coordinate.coordinates()])
     
-    def __repr__(self):
-        return str(f"Plan ID: {self.id} ,Coordinates: {self.coordinate.coordinates()}")
+    #def __repr__(self):
+    #    return str(f"Plan ID: {self.id} ,Coordinates: {self.coordinate.coordinates()}")
     
     def move(self,x:tuple=(0,0,0)):
         if len(x) != 3:

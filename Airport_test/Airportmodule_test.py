@@ -33,5 +33,9 @@ class TestAirPortPlanes(unittest.TestCase):
         self.planes.remove_plane(self.dummyplanes[0])
         self.assertEqual(len(self.planes.planes),0)
 
-    def test_str_AirportPlanes(self):
-        print(self.planes)
+
+    def test_dict_AirPortplanes(self):
+        print(self.planes.planes)
+        print(self.planes.planes.get(1))
+        if self.planes.planes.get(1):
+            print("DUPA")

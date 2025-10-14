@@ -12,12 +12,19 @@ class AirPortRestAPI:
         #endpoints
         self.app.get("/planes_number")(self.get_planes_number)
         self.app.get("/planes")(self.get_planes)
+        self.app.get("/plane/{id}")(self.get_plane)
 
     def get_planes_number(self):
         return {"planes_number": len(self.airportplanes.planes)}
     
     def get_planes(self):
         return {"planes": str(self.airportplanes.planes)}
+    
+    def get_plane(self,id):
+        if self.airportplanes.planes.get(int(id)):
+            return str(self.airportplanes.planes.get(int(id)))
+        else:
+            raise HTTPException(status_code=404, detail=f"Item {id} not found")
 
 
 def start_api(airportplanes:AirPortPlanes,databse:AirportLogbook):

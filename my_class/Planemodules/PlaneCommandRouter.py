@@ -10,6 +10,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from my_class.Planemodules.Coordinate import PlaneCoordinate, Coordinate
 from my_class.Planemodules.Planemodule import PlaneClinet
 
+SPEED=1
+
 class PlaneCommandRouter():
     def __init__(self,plane:PlaneClinet):
         self.plane=plane
@@ -22,7 +24,7 @@ class PlaneCommandRouter():
             self.coordinate_target=command["target_coordinate"]
             # 1. set a new coordianate 2. call move_toward
             self._target_coordinate.set(self.coordinate_target)
-            self.planecommand.move_toward(self._target_coordinate)
+            self.planecommand.move_toward(self._target_coordinate, SPEED)
         
         if "release_disc" in command and command["release_disc"]:
             if "disc_reason" in command:
@@ -58,7 +60,6 @@ class PlaneCommand():
 
 
     def move_toward(self, crd:Coordinate , speed:int=70):
-        speed=200
         # this function do generator if is called once again generator is changed
         if self.generator is None or self.finial_crd != crd:
             self.finial_crd = crd
