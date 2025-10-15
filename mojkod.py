@@ -1,9 +1,10 @@
-# for h_r,runway in enumerate(("a","b","C","d","E")):
-#     print(h_r)
-#     print(runway)
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
+from my_class.api.server import PlaneLog
 
-lista=["a","b","C","d","E"]
-print(len(lista))
+engine = create_engine("postgresql+psycopg2://postgres:admin@localhost/airport")
 
-for r in range(len(lista)):
-    print(r)
+with Session(engine) as session:
+    results = session.query(PlaneLog).all()
+    for r in results:
+        print(r.id, r.has_landed, r.start_coordinate,r.connection_time)
