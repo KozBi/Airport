@@ -1,15 +1,11 @@
 # Airport 
-Automatic Airport Landing System (Python, Sockets, SQL)
-
-Built a client–server simulation of an automated landing system for two runways, handling up to 100 aircraft in a 3D airspace.
-
-Implemented airplane clients and the control server with real-time communication via Python sockets. Each client is handled in a separate thread.
-
-Client asks for connection, and send his coordinate. Aiport(server) take control over the client and lead to landing. 
-
-Designed Database in PostgreSQL. Information about all Planes and occured Colissions.
-
-Aplication cover with tests in unitest.
+Automatic aircraft guidance and landing system.
+Client–server application using Sockets and JSON with multithreaded client handling.
+3D visualization implemented with matplotlib. PostgreSQL database storing information about connections,
+collisions, and landings. 
+Added a REST API built with FastAPI, providing access to aircraft and
+flight data. The API module uses SQLAlchemy for database interaction. The application includes
+unit and integration tests implemented with unittest.
 
 Youtube video: https://www.youtube.com/watch?v=yZaTmlQexnk
 
